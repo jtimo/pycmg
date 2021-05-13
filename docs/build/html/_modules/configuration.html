@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="English" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>configuration &mdash; PyCMG 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> PyCMG
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">pycmg</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyCMG</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>configuration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for configuration</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">inclusion</span> <span class="kn">import</span> <span class="n">Polyhedron</span><span class="p">,</span> <span class="n">Ellipsoid</span><span class="p">,</span> <span class="n">Cylinder</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="Configuration"><a class="viewcode-back" href="../configuration.html#configuration.Configuration">[docs]</a><span class="k">class</span> <span class="nc">Configuration</span><span class="p">():</span>
+
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Provides methods for configuring the geometrical and topological parameters of the mesostructure.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionVolumeList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionSizeList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamId_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf_max_assembly</span> <span class="o">=</span> <span class="n">vf_max_assembly</span>
+
+<div class="viewcode-block" id="Configuration.load_inclusions"><a class="viewcode-back" href="../configuration.html#configuration.Configuration.load_inclusions">[docs]</a>    <span class="k">def</span> <span class="nf">load_inclusions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conf_csv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">conf_header</span><span class="o">=</span><span class="p">[],</span>
+                        <span class="n">conf_values</span><span class="o">=</span><span class="p">[],</span> <span class="n">conf_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param conf_csv: string (with .csv extension), Location of the csv file which has aggregate parameters.</span>
+
+<span class="sd">        .. csv-table:: An example csv file for concrete</span>
+<span class="sd">           :file: ../tutorials/tutorial_3/AB8_gv2_test.csv</span>
+<span class="sd">           :header-rows: 1</span>
+<span class="sd">           :class: longtable</span>
+<span class="sd">           :widths: 1,1,1,1,1,1,1,1,1,1,1,1,1</span>
+
+<span class="sd">        .. note::</span>
+<span class="sd">          **The header of the parameters in the csv file should be as follows:**</span>
+
+<span class="sd">          - inclusion_type: Aggregate type such as (&#39;Sphere,Polyhedron,Ellipsoid and Cylinder etc.&#39;)</span>
+<span class="sd">          - a:              radius of the inclusion along direction-1. For cylinder, it is the radius of the cross-section along direction-1</span>
+<span class="sd">          - b:              radius of the inclusion along direction-2. For cylinder, it is the radius of the cross-section along direction-2</span>
+<span class="sd">          - c:              radius of the inclusion along direction-3. For cylinder, it is the half of the length</span>
+<span class="sd">          - n_cuts:         Number of faces/cuts for the polyhedron shaped aggregates (not applicable for other shapes).</span>
+<span class="sd">          - concave:        Yes/No. Provision for concave depressions on the aggregates (not applicable for cylindrical shaped aggregates)</span>
+<span class="sd">          - n_concave:      Number of concave depressions on each aggregate surface (not applicable for cylindrical shaped aggregates).</span>
+<span class="sd">          - depth:          A parameter which determines depth of the concave depression on the aggregate surface (not applicable for cylindrical shaped aggregates). Values should be between 0 to 1 (0 lowest, 1 highest).</span>
+<span class="sd">          - width:          A parameter which determines width of the concave depression on the aggregate surface (not applicable for cylinderical shaped aggregates).</span>
+<span class="sd">          - coat:           Yes/No. Provision for the coating on the aggregate surface.</span>
+<span class="sd">          - t_coat:         Thickness of the coating on the aggregate surface.</span>
+<span class="sd">          - space:          Yes/No. Provision for the spacing on the aggregate surface. Spacing is like a coat on top of the aggregate which provides minimum gap between each inclusion in the mesostructure.</span>
+<span class="sd">          - t_space:        Thickness of the spacing on the aggregate surface.</span>
+<span class="sd">          - vox_inc:        Voxel value for the aggregate.</span>
+<span class="sd">          - vox_coat:       Voxel value for the coating.</span>
+<span class="sd">          - vf_max:         Maximum volume fraction of each sized aggregates (value between 0 to 1).</span>
+
+<span class="sd">        :param conf_header: If not csv, then a header with parameter names as given above and corresponding array of values have to be loaded.</span>
+<span class="sd">        :param conf_values: In not csv, then values corresponding to the header have to be loaded.</span>
+<span class="sd">        :param conf_dict:   If not csv and conf_header &amp; conf_values, inputs can be also given through a dictionary.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">conf_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">conf_csv</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_header</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">conf_header</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;csv file has already been loaded&#39;</span><span class="p">)</span>
+                
+            <span class="k">if</span> <span class="n">conf_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;csv file has already been loaded&#39;</span><span class="p">)</span>
+            <span class="n">conf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^\s*$&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">any</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;csv file has empty cells&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_header</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;header length and values length are different!&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">conf_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">conf_header</span><span class="p">,</span> <span class="n">conf_values</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">conf_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+            <span class="n">conf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">conf_values</span><span class="p">))</span>
+            
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_header</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No inputs for the inclusions are given. Hence default inclusion (sphere of size 10) is created&#39;</span><span class="p">)</span>
+            <span class="n">conf_header</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;inclusion_type&#39;</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">]</span>  
+            <span class="n">conf_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Ellipsoid&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span> 
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">conf_values</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">conf_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+            
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">conf_header</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;header length and values length are different!&#39;</span><span class="p">)</span>
+        <span class="n">conf_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">aggr</span> <span class="o">=</span> <span class="n">InclusionFamily</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">conf_header</span><span class="p">,</span> <span class="n">conf_values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamId_count</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionSizeList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">c</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionVolumeList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">vol_vox</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aggr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamId_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Configuration.sort_inclusions"><a class="viewcode-back" href="../configuration.html#configuration.Configuration.sort_inclusions">[docs]</a>    <span class="k">def</span> <span class="nf">sort_inclusions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort_type</span><span class="o">=</span><span class="s1">&#39;size&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Sort aggregates in descending order according to the given sort_type</span>
+<span class="sd">        Parameters</span>
+
+<span class="sd">        :param sort_type: string either &#39;volume&#39; or &#39;size&#39;, defaults to &#39;size&#39;</span>
+<span class="sd">        :type sort_type: string, optional</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="n">sort_type</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
+            <span class="n">sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionVolumeList</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+            <span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="p">)[</span><span class="n">sort</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">sort_type</span> <span class="o">==</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span>
+            <span class="n">sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionSizeList</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+            <span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="p">)[</span><span class="n">sort</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">inclusion_sorted</span></div></div>
+
+
+<div class="viewcode-block" id="InclusionFamily"><a class="viewcode-back" href="../configuration.html#configuration.InclusionFamily">[docs]</a><span class="k">class</span> <span class="nc">InclusionFamily</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class is for family of inclusions</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inclusion_type:   string, default: None</span>
+<span class="sd">                      Gives the type of inclsion (Polyhedron/Sphere/Ellipsoid/Cylinder).</span>
+<span class="sd">    Id:               int, default: None</span>
+<span class="sd">                      Id of the inclusion family.</span>
+<span class="sd">    inclusionList:    array/list (1D)</span>
+<span class="sd">                      Gives list of inclusions belonging to the current family.</span>
+<span class="sd">    vf_max:           float, value between 0 to 1, default:1.0</span>
+<span class="sd">                      Maximum volume fraction of the inclusion family.</span>
+<span class="sd">    a:                float, default:10</span>
+<span class="sd">                      Radius of the inclusion along direction-1</span>
+<span class="sd">                      For cylinder it is the radius of the cross-section along direction-1.</span>
+<span class="sd">    b:                Radius of the inclusion along direction-2</span>
+<span class="sd">                      For cylinder it is the radius of the cross-section along direction-2.</span>
+<span class="sd">    c:                Radius of the inclusion along direction-3</span>
+<span class="sd">                      For cylinder it is the half of the length.</span>
+<span class="sd">    n_cuts:           int, default:10</span>
+<span class="sd">                      Number of faces of the irregular polyhedron. Doesnt apply for ellipsoid/sphere/cylinder.</span>
+<span class="sd">    concave:          bool, True/False, default:False</span>
+<span class="sd">                      Boolean for concave depression on inclusion surface. Not applicable for cylinder shape.</span>
+<span class="sd">    n_concave:        int, default:0</span>
+<span class="sd">                      Number of concave depressions on the inclusion surface. Not applicable for cylinder shape.</span>
+<span class="sd">    depth:            float, value between 0 to 1, default:0</span>
+<span class="sd">                      Parameter which determines depth of the concave depression from the inclusion surface.</span>
+<span class="sd">                      Not applicable for cylinder shape.</span>
+<span class="sd">    width:            float, default:0</span>
+<span class="sd">                      Parameter which determines width of the concave depression on the inclusion surface.</span>
+<span class="sd">                      Not applicable for cylinder shape.</span>
+<span class="sd">    coat:             bool, True/False, default:False</span>
+<span class="sd">                      Boolean for coat on inclusion. </span>
+<span class="sd">    t_coat:           float, default:0</span>
+<span class="sd">                      Thickness of the coating.</span>
+<span class="sd">    space:            bool, True/False, default:False</span>
+<span class="sd">                      Boolean for space which determines gap between inclusions in micro/mesostructure.</span>
+<span class="sd">    t_space:          flaot, default:0</span>
+<span class="sd">                      Thickness of the spacing.</span>
+<span class="sd">    vox_inc:          int, default:1</span>
+<span class="sd">                      Voxel value for the inclusion.</span>
+<span class="sd">    vox_coat:         int, default:2</span>
+<span class="sd">                      Voxel value for the coat.</span>
+<span class="sd">    x:                float, default:0</span>
+<span class="sd">                      Location along x direction to assemble the inclusions belonging to this family.</span>
+<span class="sd">    y:                float, default:0</span>
+<span class="sd">                      Location along y direction to assemble the inclusions belonging to this family.</span>
+<span class="sd">    z:                float, default:0</span>
+<span class="sd">                      Location along z direction to assemble the inclusions belonging to this family.</span>
+<span class="sd">    kwargs:           Other parameters, default:None</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inclusion_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inclusionList</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">vf_max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_cuts</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">concave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_concave</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">t_coat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">t_space</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">vox_inc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vox_coat</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_type</span> <span class="o">=</span> <span class="n">inclusion_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionList</span> <span class="o">=</span> <span class="n">inclusionList</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span> <span class="o">=</span> <span class="n">vf_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cuts</span> <span class="o">=</span> <span class="n">n_cuts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">concave</span> <span class="o">=</span> <span class="n">concave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_concave</span> <span class="o">=</span> <span class="n">n_concave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coat</span> <span class="o">=</span> <span class="n">coat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span> <span class="o">=</span> <span class="n">t_coat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="n">space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_space</span> <span class="o">=</span> <span class="n">t_space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span> <span class="o">=</span> <span class="n">vox_inc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span> <span class="o">=</span> <span class="n">vox_coat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span> <span class="o">=</span> <span class="n">vf_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">standard_inclusion</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_cuts</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cuts</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">concave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">concave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_concave</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_concave</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_space</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t_space</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">standard_inclusion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_inclusion</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span> <span class="o">!=</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;voxel value for spacing should be 100&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InclusionFamily.generate_inclusion"><a class="viewcode-back" href="../configuration.html#configuration.InclusionFamily.generate_inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">generate_inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method generates an inclusion</span>
+
+<span class="sd">        :return: Object of class :py:class:`smg_inclusion.Inclusion`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_type</span> <span class="o">==</span> <span class="s1">&#39;Polyhedron&#39;</span><span class="p">:</span>
+            <span class="n">inclusion</span> <span class="o">=</span> <span class="n">Polyhedron</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coat</span><span class="p">,</span>
+                                            <span class="n">t_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span>
+                                               <span class="n">t_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_space</span><span class="p">,</span> <span class="n">vox_inc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span><span class="p">,</span>
+                                               <span class="n">vox_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span><span class="p">,</span> <span class="n">vox_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span><span class="p">,</span> 
+                                               <span class="n">n_cuts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cuts</span><span class="p">,</span> <span class="n">concave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">concave</span><span class="p">,</span> 
+                                               <span class="n">n_concave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_concave</span><span class="p">,</span>
+                                               <span class="n">depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_type</span> <span class="o">==</span> <span class="s1">&#39;Ellipsoid&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_type</span> <span class="o">==</span> <span class="s1">&#39;Sphere&#39;</span><span class="p">:</span>
+            <span class="n">inclusion</span> <span class="o">=</span> <span class="n">Ellipsoid</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coat</span><span class="p">,</span>
+                                            <span class="n">t_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span>
+                                               <span class="n">t_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_space</span><span class="p">,</span> <span class="n">vox_inc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span><span class="p">,</span>
+                                               <span class="n">vox_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span><span class="p">,</span> <span class="n">vox_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span><span class="p">,</span> 
+                                               <span class="n">concave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">concave</span><span class="p">,</span> <span class="n">n_concave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_concave</span><span class="p">,</span>
+                                               <span class="n">depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
+            
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_type</span> <span class="o">==</span> <span class="s1">&#39;Cylinder&#39;</span><span class="p">:</span>
+            <span class="n">inclusion</span> <span class="o">=</span> <span class="n">Cylinder</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coat</span><span class="p">,</span>
+                                            <span class="n">t_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span>
+                                               <span class="n">t_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_space</span><span class="p">,</span> <span class="n">vox_inc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span><span class="p">,</span>
+                                               <span class="n">vox_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span><span class="p">,</span> <span class="n">vox_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39; inclusion type is invalid&#39;</span><span class="p">)</span>
+            
+        <span class="n">inclusion</span><span class="o">.</span><span class="n">generate_inclusion_matrix</span><span class="p">()</span>
+        <span class="n">inclusion</span><span class="o">.</span><span class="n">compute_vox_volume</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">inclusion</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, PyCMG developers.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
