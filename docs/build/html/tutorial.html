@@ -87,12 +87,8 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#advanced-tutorial">Advanced Tutorial</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#complete-code">Complete code:</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-an-ab8-mesostructure-using-an-aggregate-size-distribution">Generating an AB8 Mesostructure using an aggregate size distribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-a-fully-customized-ab8-mesostructure">Generating a fully customized AB8 Mesostructure</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Documentation</a></li>
@@ -166,15 +162,17 @@
             
   <div class="section" id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="quickstart">
-<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<div class="figure align-center">
-<a class="reference internal image-reference" href="../../tutorials/tutorial_2/homogenization_scheme.png"><img alt="The multiscale model of mortar" src="../../tutorials/tutorial_2/homogenization_scheme.png" /></a>
-</div>
+<div class="section" id="generating-an-ab8-mesostructure-using-an-aggregate-size-distribution">
+<h2>Generating an AB8 Mesostructure using an aggregate size distribution<a class="headerlink" href="#generating-an-ab8-mesostructure-using-an-aggregate-size-distribution" title="Permalink to this headline">¶</a></h2>
 <p>In order to generate a concrete mesostructure with a certain aggregate size distribution, we first need to specify the
 total aggregate volume fraction in the concrete material and then the aggregate size distribution.
-First create a text file containing the aggregate size distribution. The text file should contain atleast two columns.
-The first column lists the aggregate sizes while the second column the corresponding volume-fraction. This volume fraction is relative to the total volume fraction of the aggregates in the material.
+First create a text file containing the aggregate size distribution.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/AB8_200.png"><img alt="The multiscale model of mortar" src="_images/AB8_200.png" style="width: 653.85px; height: 241.65px;" /></a>
+</div>
+<p>The text file should contain atleast two columns.
+The first column lists the aggregate sizes while the second column the corresponding volume-fraction.
+This volume fraction is relative to the total volume fraction of the aggregates in the material.
 Here is the text file with a distribution for AB8 standard concrete.</p>
 <table class="colwidths-given docutils align-default" id="id1">
 <caption><span class="caption-text">An example csv file for AB8 concrete</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
@@ -233,15 +231,17 @@ Here is the text file with a distribution for AB8 standard concrete.</p>
 </tbody>
 </table>
 <p>please do not forget to add the correct header.</p>
-<p>Having specified the aggregate size distribution and given the total aggregate volume fraction,
-we can generate the required mesostructure as follows:</p>
+<p>Having specified the aggregate size distribution and given the total aggregate volume fraction, we have to option to
+provide the 'average shape' of aggregate in terms of ellipsoidal radii. The first value must be 1 and the second and
+third values are scaling factors that will scale the radii in the other dimensions with respect to the first dimension.</p>
+<p>we can generate the required mesostructure as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#IMPORT THE NECESSARY LIBRARIES</span>
 <span class="kn">from</span> <span class="nn">generate_mesostructure</span> <span class="kn">import</span> <span class="n">Mesostructure</span>
 <span class="kn">from</span> <span class="nn">configuration</span> <span class="kn">import</span> <span class="n">Configuration</span>
 <span class="kn">from</span> <span class="nn">visualization</span> <span class="kn">import</span> <span class="n">export_data</span><span class="p">,</span> <span class="n">visualize_sections</span>
 
 <span class="c1">#SPECIFY THE TOTAL AGGREGATE VOLUME FRACTION AND AGGREGATE SIZE DISTRIBUTION</span>
-<span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">average_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 <span class="n">my_configuration</span><span class="o">.</span><span class="n">load_inclusions</span><span class="p">(</span><span class="n">conf_csv</span><span class="o">=</span><span class="s1">&#39;AB8_CMG.csv&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -262,10 +262,8 @@ we can generate the required mesostructure as follows:</p>
 </div>
 <p>That is it. We have generated our first mesostructure.</p>
 </div>
-<div class="section" id="advanced-tutorial">
-<h2>Advanced Tutorial<a class="headerlink" href="#advanced-tutorial" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="introduction">
-<h3>Introduction:<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="generating-a-fully-customized-ab8-mesostructure">
+<h2>Generating a fully customized AB8 Mesostructure<a class="headerlink" href="#generating-a-fully-customized-ab8-mesostructure" title="Permalink to this headline">¶</a></h2>
 <p>Concrete Mesostructure in voxel format is generated by assembling inclusions of given size
 onto the main assembly. Matrix (Cement) in the mesostructure is represented by voxel number 0
 and inclusions (Aggregate) by 1, coating (ITZ) is represented by 2.  The process of
@@ -287,12 +285,12 @@ Import the required libraries as given in the following lines:</p>
 </div>
 <p>Firstly, Configuration object has to be created with maximum volume fraction for the current
 configuration as the input</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Followed this, inclusions input details in csv file have to be loaded to the configuration as
 below</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my_configuration.load_inclusions(conf_csv=AB8_CMG.csv’)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my_configuration.load_inclusions(conf_csv=AB8_CMG_full.csv’)
 </pre></div>
 </div>
 <p>Following input details must be/can be specified for the inclusion family to load to
@@ -311,9 +309,7 @@ the Configuration object.</p>
 the maximum volume fraction of the inclusion given for the entire assembly. For example, for the mesostructure assembly,
 if the maximum volume fraction is 0.5, then total maximum volume fraction of all inclusion families (all rows in input csv file)
 should be equal to 1 since it is relative to the maximum volume fraction of the assembly.</p>
-<p>Please note that minimum required input is just inclusion size a  and maximum volume fraction
-vf_max for the inclusion family .
-csv input file template is given below.</p>
+<p>An example csv input file template is given below.</p>
 <table class="colwidths-given docutils align-default" id="id2">
 <caption><span class="caption-text">An example csv file for AB8 concrete</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
 <colgroup>
@@ -532,16 +528,7 @@ csv input file template is given below.</p>
 </table>
 <p>Column header name should be same as the input names given above, but position of the columns
 can be changed and non-mandatory input columns can be removed.</p>
-<p>Once configuration is loaded with the input file, inclusion families are sorted according to
-the given type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my_configuration.sort_inclusions(sort_type=’size’)
-</pre></div>
-</div>
-<p>This is done to accelerate the assembly process such that larger sized inclusions are assembled
-first followed with lower size particles. Sorting can be done either based on volume
-(‘volume) or size (‘size) sort_type.
-Default sort_type is ‘size’.   This method is optional.
-Followed with this, Mesostructure object is created with mesostructure size and configuration
+<p>Followed with this, Mesostructure object is created with mesostructure size and configuration
 as input. Default mesostructure size is 100,100,100. So, it is not mandatory to load this value.
 Also configuration can be separately added by using ‘add_configuration’ method</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_mesostructure</span> <span class="o">=</span> <span class="n">Mesostructure</span><span class="p">(</span><span class="n">mesostructure_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">],</span> <span class="n">my_configuration</span><span class="p">)</span>
@@ -587,26 +574,23 @@ some other analysis by using following code</p>
 in the file name/location should be consistent (eg. vtk-vti, csv-csv, npy-npy etc.)
 One can also visualize sections of the mesostructure using following code with the mesostructure
 and number of input slices in each direction as arguments. Default value for argument slices
-is 3. ::
-visualizeSections(my_synthetic_microstructure, slices=5)</p>
+is 3.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">visualizeSections</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="complete-code">
-<h3>Complete code:<a class="headerlink" href="#complete-code" title="Permalink to this headline">¶</a></h3>
 <p>Here is the complete code to generate a concrete mesostructure for AB8 standard:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">generate_mesostructure</span> <span class="kn">import</span> <span class="n">Mesostructure</span>
 <span class="kn">from</span> <span class="nn">configuration</span> <span class="kn">import</span> <span class="n">Configuration</span>
 <span class="kn">from</span> <span class="nn">visualization</span> <span class="kn">import</span> <span class="n">export_data</span><span class="p">,</span> <span class="n">visualize_sections</span>
 
 <span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">my_configuration</span><span class="o">.</span><span class="n">load_inclusions</span><span class="p">(</span><span class="n">conf_csv</span><span class="o">=</span><span class="s1">&#39;AB8_CMG.csv&#39;</span><span class="p">)</span>
-<span class="n">my_configuration</span><span class="o">.</span><span class="n">sort_inclusions</span><span class="p">()</span>
+<span class="n">my_configuration</span><span class="o">.</span><span class="n">load_inclusions</span><span class="p">(</span><span class="n">conf_csv</span><span class="o">=</span><span class="s1">&#39;AB8_CMG_full.csv&#39;</span><span class="p">)</span>
 <span class="n">my_mesostructure</span> <span class="o">=</span> <span class="n">Mesostructure</span><span class="p">(</span><span class="n">mesostructure_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>
 <span class="n">my_mesostructure</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">my_configuration</span><span class="p">)</span>
 <span class="n">my_synthetic_microstructure</span> <span class="o">=</span><span class="n">my_mesostructure</span><span class="o">.</span><span class="n">assemble_SRA</span><span class="p">()</span>
 <span class="n">visualize_sections</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="n">export_data</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="s1">&#39;vtk&#39;</span><span class="p">,</span> <span class="s1">&#39;mesostructure.vti&#39;</span><span class="p">)</span>
 </pre></div>
-</div>
 </div>
 </div>
 </div>

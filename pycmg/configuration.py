@@ -26,7 +26,7 @@ class Configuration:
         :param conf_csv: string (with .csv extension), Location of the csv file which has aggregate parameters.
 
         .. csv-table:: An example csv file for concrete
-           :file: ../tutorials/tutorial_3/AB8_gv2_test.csv
+           :file: ../examples/AB8_CMG_full.csv
            :header-rows: 1
            :class: longtable
            :widths: 1,1,1,1,1,1,1,1,1,1,1,1,1
