@@ -11,7 +11,7 @@ Installation
 - Choose our pre-built concrete specification in the examples folder to generate your first mesostructure.
 - Advanced users can use generate custom mesostructures (see tutorial).
 
-If you have questions, drop us an email at jithutimothy@googlemail.com.
+If you have questions, drop us an email at timothy.jithenderjaswant[at]rub.de.
 
 --------------
 License
