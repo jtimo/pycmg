@@ -29,12 +29,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## Developers
-
-Scale-Bridging Modeling of Materials Group, Ruhr-University Bochum.
-If you have any difficulties please do not hesitate to contact us. For issues please refer to PyCMG issue tracker. 
-
-## Funding
+## Acknowledgement
 
 This software project is partially supported by the German Research Foundation (DFG) within the framework of the sub-project FOR CODA.
 
