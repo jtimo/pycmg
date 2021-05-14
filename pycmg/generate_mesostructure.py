@@ -49,7 +49,7 @@ class Mesostructure:
         for i in range(len(config)):
             self.vf_max.append(config[i].vf_max_assembly)
     
-    def assemble_SRA(self, attempt_max=50000, threshold=50, iter_limit=10):
+    def assemble_SRA(self, attempt_max=500000, threshold=50, iter_limit=10):
         '''
         Assemble aggregates/pores onto the mesostructure 3D matrix using Semi-Random Assembly (SRA) algorithm.
 
@@ -88,6 +88,9 @@ class Mesostructure:
             inclusion_count.append(self.configuration[self.conf_count].inclusionFamList[i].n_inclusion)
             self.configuration[self.conf_count].inclusionFamList[i].count = 0
         
+        vf_test=0
+        for i in range(np.size(self.configuration[self.conf_count].inclusionFamList)):
+            vf_test+=self.configuration[self.conf_count].inclusionFamList[i].n_inclusion*self.configuration[self.conf_count].inclusionFamList[i].vf_each
         if vf_inc_max <= 1-10E-3 or vf_inc_max >= 1+10E-3:
             raise Exception('Total maximum volume fraction of all inclusion families must be close to 1')
         
@@ -154,7 +157,7 @@ class Mesostructure:
                 if inclusionFamList[sortedId[i]].count >= inclusionFamList[sortedId[i]].n_inclusion or inclusionFamList[sortedId[i]].vf>=vf_max_incFam:
                     i += 1 
                     if i < np.size(inclusionFamList):
-                        vf_max_incFam = inclusionFamList[i].vf_max*vf_max
+                        vf_max_incFam = inclusionFamList[sortedId[i]].vf_max*vf_max
 
         self.vf.append(vf); self.attempt.append(attempt)
         self.inclusionList.append(inclusionList)
@@ -162,51 +165,7 @@ class Mesostructure:
         print('Configuration {0} is assembled with volume fraction {1}'.format(self.conf_count,vf-self.vf_previous))
         self.vf_previous += vf
         return self.mat_meso
-    
-    def assemble_manually(self):
-        '''
-        Assemble aggregates/pores onto the mesostructure 3D matrix using Semi-Random Assembly (SRA) algorithm.
-
-        Parameters
-        ----------
-        attempt_max:    int, default:50000
-                        Maximum number of unsuccessfull assembly attempts before temrinating the assembly algorithm.
-        threshold:      int, default:50
-                        Number of unsuccessfull attempts after which the algorithm shifts to SRA (alorithm type-2) from RSA (algorithm type-1)
-        iter_limit:     int, default:10
-                        Number of unsuccessfull attempts to try with the same particle/aggregate orientation before switching to another random orientation.
-                        
-        Return
-        ------
-        mat_meso:       3D array of type int
-                        Mesostructure 3D array with aggregates/pores/particles assembled inside.
-        '''
-        if len(self.configuration) == 0:
-            raise Exception('No configuration is loaded')
-
-        self.n_inc_total.append(np.size(self.configuration[self.conf_count].inclusionFamList))
-        aggregates = self.configuration[self.conf_count].inclusionFamList
-        
-        for i in range(np.size(aggregates)):
-            x0 = aggregates[i].standard_inclusion.x0
-            inclusion = aggregates[i].standard_inclusion
-            if np.sum(np.logical_or(x0 < 0, x0 > self.size)) > 0:
-                      raise Exception('assembly location is outside the mesostructure domain')
-
-            indices = lambda x_start, x_end, length: np.mod(np.arange(x_start,x_end+1),length).astype(int)
-            inclusion_size = np.array(np.shape(inclusion.mat_inc))
-            ind_start = x0-np.floor(inclusion_size/2)
-            ind_end = x0+np.ceil(inclusion_size/2)-1
-            ix = indices(ind_start[0], ind_end[0], self.size[0])
-            iy = indices(ind_start[1], ind_end[1], self.size[1])
-            iz = indices(ind_start[2], ind_end[2], self.size[2])
-            [x, y, z] = np.meshgrid(ix, iy, iz)
-            Itest = self.mat_meso[x, y, z]
-            Itest[inclusion.mat_inc > 0] = inclusion.mat_inc[inclusion.mat_inc > 0]
-            self.mat_meso[x, y, z] = Itest
-
-        return self.mat_meso
-               
+                   
     def __assemble_inclusion(self, mat_meso, inclusion, x0):
         check = False
         indices = lambda x_start, x_end, length: np.mod(np.arange(x_start, x_end+1), length).astype(int)
