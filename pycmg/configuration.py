@@ -5,19 +5,20 @@ from inclusion import Polyhedron
 import pandas as pd
 
 
-class Configuration():
+class Configuration:
 
     '''
     Provides methods for configuring the geometrical and topological parameters of the mesostructure.
     '''
 
-    def __init__(self,vf_max_assembly=0.3):
+    def __init__(self,vf_max_assembly=0.3, average_shape=False):
         self.inclusionFamList = []
         self.inclusionFamIdList = []
         self.inclusionVolumeList = []
         self.inclusionSizeList = []
         self.inclusionFamId_count = 0
         self.vf_max_assembly = vf_max_assembly
+        self.average_shape = average_shape
 
     def load_inclusions(self, conf_csv=None):
 
@@ -62,7 +63,7 @@ class Configuration():
             raise Exception('csv file has empty cells')
         conf_values=np.array(conf_values)
         for i in range(np.shape(conf_values)[0]):
-            aggr = InclusionFamily(kwargs=dict(zip(conf_header, conf_values[i, :])))
+            aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
             self.inclusionFamIdList.append(self.inclusionFamId_count)
             self.inclusionSizeList.append(max(aggr.standard_inclusion.a,aggr.standard_inclusion.b,aggr.standard_inclusion.c))
             self.inclusionVolumeList.append(aggr.standard_inclusion.vol_vox)
@@ -92,7 +93,7 @@ class Configuration():
         self.inclusion_sorted = inclusion_sorted
 
 
-class InclusionFamily():
+class InclusionFamily:
     '''
     This class is for family of inclusions
     
@@ -135,7 +136,7 @@ class InclusionFamily():
     kwargs:           Other parameters, default:None
     
     '''
-    def __init__(self, Id=None, inclusionList=[],
+    def __init__(self, average_shape=False, Id=None, inclusionList=[],
                  vf_max=1, a=10, b=0, c=0, n_cuts=10, concave=False, n_concave=0,
                  depth=0, width=0, coat=False,
                  t_coat=0, space=False, t_space=0, x=0, y=0, z=0,
@@ -168,9 +169,9 @@ class InclusionFamily():
         self.b = float(self.b)
         self.c = float(self.c)
         if self.b == 0:
-            self.b = self.a
+            self.b = average_shape[1]*self.a
         if self.c == 0:
-            self.c = self.b
+            self.c = average_shape[2]*self.a
         self.vf_max = float(self.vf_max)
         self.n_cuts = int(self.n_cuts)
         self.concave = self.concave

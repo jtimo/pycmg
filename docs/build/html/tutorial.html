@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Quickstart tutorials &mdash; PyCMG 1.0 documentation</title>
+  <title>Tutorial &mdash; PyCMG 1.0 documentation</title>
   
 
   
@@ -86,7 +86,15 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-tutorial">Advanced Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complete-code">Complete code:</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developers.html">Developers</a></li>
 </ul>
@@ -137,7 +145,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Quickstart tutorials</li>
+      <li>Tutorial</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -156,8 +164,451 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quickstart-tutorials">
-<h1>Quickstart tutorials<a class="headerlink" href="#quickstart-tutorials" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="../../tutorials/tutorial_2/homogenization_scheme.png"><img alt="The multiscale model of mortar" src="../../tutorials/tutorial_2/homogenization_scheme.png" /></a>
+</div>
+<p>In order to generate a concrete mesostructure with a certain aggregate size distribution, we first need to specify the
+total aggregate volume fraction in the concrete material and then the aggregate size distribution.
+First create a text file containing the aggregate size distribution. The text file should contain atleast two columns.
+The first column lists the aggregate sizes while the second column the corresponding volume-fraction. This volume fraction is relative to the total volume fraction of the aggregates in the material.
+Here is the text file with a distribution for AB8 standard concrete.</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">An example csv file for AB8 concrete</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>a</p></th>
+<th class="head"><p>vf_max</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>0.134042553</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>0.134042553</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>0.075886525</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>0.075886525</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>0.075886525</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>0.075886525</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>0.075886525</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>0.075886525</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>0.046099291</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>0.046099291</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>0.046099291</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>0.045138889</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>0.045138889</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>0.048020095</p></td>
+</tr>
+</tbody>
+</table>
+<p>please do not forget to add the correct header.</p>
+<p>Having specified the aggregate size distribution and given the total aggregate volume fraction,
+we can generate the required mesostructure as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#IMPORT THE NECESSARY LIBRARIES</span>
+<span class="kn">from</span> <span class="nn">generate_mesostructure</span> <span class="kn">import</span> <span class="n">Mesostructure</span>
+<span class="kn">from</span> <span class="nn">configuration</span> <span class="kn">import</span> <span class="n">Configuration</span>
+<span class="kn">from</span> <span class="nn">visualization</span> <span class="kn">import</span> <span class="n">export_data</span><span class="p">,</span> <span class="n">visualize_sections</span>
+
+<span class="c1">#SPECIFY THE TOTAL AGGREGATE VOLUME FRACTION AND AGGREGATE SIZE DISTRIBUTION</span>
+<span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">my_configuration</span><span class="o">.</span><span class="n">load_inclusions</span><span class="p">(</span><span class="n">conf_csv</span><span class="o">=</span><span class="s1">&#39;AB8_CMG.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, we can specify the size of the REV-Mesostructure and add our configuration</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_mesostructure</span> <span class="o">=</span> <span class="n">Mesostructure</span><span class="p">(</span><span class="n">mesostructure_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>
+<span class="n">my_mesostructure</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">my_configuration</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Note, we can add multiple configurations (multiple standards) with various sizes. Here we just have one configuration.</p>
+<p>Now we can generate the required concrete mesostructure, visualize and export the data using the following three lines.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#GENERATE</span>
+<span class="n">my_synthetic_microstructure</span> <span class="o">=</span><span class="n">my_mesostructure</span><span class="o">.</span><span class="n">assemble_SRA</span><span class="p">()</span>
+<span class="c1"># VISUALIZE</span>
+<span class="n">visualize_sections</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1">#EXPORT</span>
+<span class="n">export_data</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="s1">&#39;vtk&#39;</span><span class="p">,</span> <span class="s1">&#39;mesostructure.vti&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That is it. We have generated our first mesostructure.</p>
+</div>
+<div class="section" id="advanced-tutorial">
+<h2>Advanced Tutorial<a class="headerlink" href="#advanced-tutorial" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="introduction">
+<h3>Introduction:<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<p>Concrete Mesostructure in voxel format is generated by assembling inclusions of given size
+onto the main assembly. Matrix (Cement) in the mesostructure is represented by voxel number 0
+and inclusions (Aggregate) by 1, coating (ITZ) is represented by 2.  The process of
+mesostructure generation involves first generating inclusion of given input details
+and then assembling onto the main mesostructure.  To specify the concrete inclusion
+details such as size, volume fraction etc. a Configuration object has to be first created.
+This object is then loaded onto the Mesostructure object in which when the assembly method
+is called, the inclusions are generated by importing details from the loaded Configuration
+and assembled onto the mesostructure.  Inputs are provided for a family of inclusions.
+Based on the maximum volume fraction specified for the family, required number inclusions
+in that family is estimated and assembled.</p>
+<p>To generate the concrete mesostructure using CMG, following are the instructions.
+Import the required libraries as given in the following lines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">generate_mesostructure</span> <span class="kn">import</span> <span class="n">Mesostructure</span>
+<span class="kn">from</span> <span class="nn">configuration</span> <span class="kn">import</span> <span class="n">Configuration</span>
+<span class="kn">from</span> <span class="nn">visualization</span> <span class="kn">import</span> <span class="n">export_data</span><span class="p">,</span> <span class="n">visualize_sections</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+<p>Firstly, Configuration object has to be created with maximum volume fraction for the current
+configuration as the input</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Followed this, inclusions input details in csv file have to be loaded to the configuration as
+below</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my_configuration.load_inclusions(conf_csv=AB8_CMG.csv’)
+</pre></div>
+</div>
+<p>Following input details must be/can be specified for the inclusion family to load to
+the Configuration object.</p>
+<ol class="arabic simple">
+<li><p>a: radius of the inclusion along axis-1, default 10</p></li>
+<li><p>b: radius of the inclusion along axis-2, default b=a</p></li>
+<li><p>c: radius of the inclusion along axis-3/half of length of the inclusion for ‘Cylinder’, default c=a</p></li>
+<li><p>vf_max: Maximum volume fraction for the current inclusion family.</p></li>
+<li><p>coat: True/False for coating provision on the inclusion, default False</p></li>
+<li><p>t_coat: thickness of coating on the inclusion, default 0</p></li>
+<li><p>space: True/False for providing spacing between inclusions in the assembly, default False</p></li>
+<li><p>t_space : thickness of the spacing on the inclusion (similar to coating), default 0</p></li>
+</ol>
+<p>Note: vf_max is relative to
+the maximum volume fraction of the inclusion given for the entire assembly. For example, for the mesostructure assembly,
+if the maximum volume fraction is 0.5, then total maximum volume fraction of all inclusion families (all rows in input csv file)
+should be equal to 1 since it is relative to the maximum volume fraction of the assembly.</p>
+<p>Please note that minimum required input is just inclusion size a  and maximum volume fraction
+vf_max for the inclusion family .
+csv input file template is given below.</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">An example csv file for AB8 concrete</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>a</p></th>
+<th class="head"><p>b</p></th>
+<th class="head"><p>c</p></th>
+<th class="head"><p>vf_max</p></th>
+<th class="head"><p>n_cuts</p></th>
+<th class="head"><p>coat</p></th>
+<th class="head"><p>t_coat</p></th>
+<th class="head"><p>space</p></th>
+<th class="head"><p>t_space</p></th>
+<th class="head"><p>concave</p></th>
+<th class="head"><p>width</p></th>
+<th class="head"><p>depth</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>3</p></td>
+<td><p>0.134042553</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>3</p></td>
+<td><p>5</p></td>
+<td><p>3</p></td>
+<td><p>0.134042553</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>4</p></td>
+<td><p>3</p></td>
+<td><p>4</p></td>
+<td><p>0.075886525</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>6</p></td>
+<td><p>4</p></td>
+<td><p>0.075886525</p></td>
+<td><p>20</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>0.075886525</p></td>
+<td><p>30</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>3</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>5</p></td>
+<td><p>3</p></td>
+<td><p>3</p></td>
+<td><p>0.075886525</p></td>
+<td><p>30</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>3</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>6</p></td>
+<td><p>4</p></td>
+<td><p>3</p></td>
+<td><p>0.075886525</p></td>
+<td><p>30</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>3</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>0.075886525</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>3</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>12</p></td>
+<td><p>5</p></td>
+<td><p>0.046099291</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>3</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>7</p></td>
+<td><p>12</p></td>
+<td><p>8</p></td>
+<td><p>0.046099291</p></td>
+<td><p>5</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>3</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>12</p></td>
+<td><p>8</p></td>
+<td><p>0.046099291</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>5</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>4</p></td>
+<td><p>8</p></td>
+<td><p>0.045138889</p></td>
+<td><p>10</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>5</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>5</p></td>
+<td><p>8</p></td>
+<td><p>0.045138889</p></td>
+<td><p>20</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>5</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>5</p></td>
+<td><p>8</p></td>
+<td><p>0.048020095</p></td>
+<td><p>20</p></td>
+<td><p>FALSE</p></td>
+<td><p>0</p></td>
+<td><p>TRUE</p></td>
+<td><p>2</p></td>
+<td><p>TRUE</p></td>
+<td><p>5</p></td>
+<td><p>0.2</p></td>
+</tr>
+</tbody>
+</table>
+<p>Column header name should be same as the input names given above, but position of the columns
+can be changed and non-mandatory input columns can be removed.</p>
+<p>Once configuration is loaded with the input file, inclusion families are sorted according to
+the given type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>my_configuration.sort_inclusions(sort_type=’size’)
+</pre></div>
+</div>
+<p>This is done to accelerate the assembly process such that larger sized inclusions are assembled
+first followed with lower size particles. Sorting can be done either based on volume
+(‘volume) or size (‘size) sort_type.
+Default sort_type is ‘size’.   This method is optional.
+Followed with this, Mesostructure object is created with mesostructure size and configuration
+as input. Default mesostructure size is 100,100,100. So, it is not mandatory to load this value.
+Also configuration can be separately added by using ‘add_configuration’ method</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_mesostructure</span> <span class="o">=</span> <span class="n">Mesostructure</span><span class="p">(</span><span class="n">mesostructure_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">],</span> <span class="n">my_configuration</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_mesostructure</span> <span class="o">=</span> <span class="n">Mesostructure</span><span class="p">(</span><span class="n">mesostructure_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">])</span>
+<span class="n">my_mesostructure</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">my_configuration</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, assembly of the inclusions as per the details given in the configuration is done using
+CMG Semi-Random Assembly (SRA) algorithm.
+This algorithm assembles the inclusions at random locations, but with CMG optimization.
+SRA algorithm is called as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asmbly</span><span class="o">.</span><span class="n">assemble_SRA</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The algorithm tries to assemble the inclusions till maximum volume fraction is achieved.
+Since the assembly is at random points, it becomes difficult to fit the inclusions into
+the mesostructure as the packing density increases. So, assembly time increases with the
+given maximum volume fraction. To terminate the process after some time, a parameter
+attempt_max is given which gives a limit on how many failed attempts to assemble
+the inclusion can be made.  This parameter can also be given as input to the method if required.
+Also, there is a threshold value beyond which the algorithm shifts from completely
+random assembly to semi-random to accommodate more inclusions.
+This threshold value can also be given as input. More the threshold value,
+more random the assembly is (more slow!).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_synthetic_microstructure</span> <span class="o">=</span> <span class="n">asmbly</span><span class="o">.</span><span class="n">assemble_SRA</span><span class="p">(</span><span class="n">attempt_max</span><span class="o">=</span><span class="mi">500000</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>here my_synthetic_microstructure is the voxel representation of the mesostructure (3D array, int).
+Mesostructure can be exported to different types of output files for either visualization or
+some other analysis by using following code</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>exportData(data= my_synthetic_microstructure, export_type=’vtk’, fileName=’mesostructure.vti’)
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>exportData(data= my_synthetic_microstructure,
+     export_type=’csv’, fileName=’mesostructure.csv’)
+</pre></div>
+</div>
+<p>vtk, csv, npy, npz, txt export types are allowed. Please note that the export type and extension
+in the file name/location should be consistent (eg. vtk-vti, csv-csv, npy-npy etc.)
+One can also visualize sections of the mesostructure using following code with the mesostructure
+and number of input slices in each direction as arguments. Default value for argument slices
+is 3. ::
+visualizeSections(my_synthetic_microstructure, slices=5)</p>
+</div>
+<div class="section" id="complete-code">
+<h3>Complete code:<a class="headerlink" href="#complete-code" title="Permalink to this headline">¶</a></h3>
+<p>Here is the complete code to generate a concrete mesostructure for AB8 standard:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">generate_mesostructure</span> <span class="kn">import</span> <span class="n">Mesostructure</span>
+<span class="kn">from</span> <span class="nn">configuration</span> <span class="kn">import</span> <span class="n">Configuration</span>
+<span class="kn">from</span> <span class="nn">visualization</span> <span class="kn">import</span> <span class="n">export_data</span><span class="p">,</span> <span class="n">visualize_sections</span>
+
+<span class="n">my_configuration</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">(</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">my_configuration</span><span class="o">.</span><span class="n">load_inclusions</span><span class="p">(</span><span class="n">conf_csv</span><span class="o">=</span><span class="s1">&#39;AB8_CMG.csv&#39;</span><span class="p">)</span>
+<span class="n">my_configuration</span><span class="o">.</span><span class="n">sort_inclusions</span><span class="p">()</span>
+<span class="n">my_mesostructure</span> <span class="o">=</span> <span class="n">Mesostructure</span><span class="p">(</span><span class="n">mesostructure_size</span><span class="o">=</span><span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>
+<span class="n">my_mesostructure</span><span class="o">.</span><span class="n">add_configuration</span><span class="p">(</span><span class="n">my_configuration</span><span class="p">)</span>
+<span class="n">my_synthetic_microstructure</span> <span class="o">=</span><span class="n">my_mesostructure</span><span class="o">.</span><span class="n">assemble_SRA</span><span class="p">()</span>
+<span class="n">visualize_sections</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">export_data</span><span class="p">(</span><span class="n">my_synthetic_microstructure</span><span class="p">,</span> <span class="s1">&#39;vtk&#39;</span><span class="p">,</span> <span class="s1">&#39;mesostructure.vti&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
 
