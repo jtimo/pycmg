@@ -1,5 +1,5 @@
 # PyCMG
-![GitHub](https://img.shields.io/github/license/jtimo/pymatsim) [![Documentation Status](https://readthedocs.org/projects/pymatsim/badge/?version=latest)](https://pymatsim.readthedocs.io/en/latest/?badge=latest)
+![GitHub](https://img.shields.io/github/license/jtimo/pycmg) [![Documentation Status](https://readthedocs.org/projects/pymatsim/badge/?version=latest)](https://pymatsim.readthedocs.io/en/latest/?badge=latest)
 
 PyCMG is an open source software package for generating synthetic concrete mesostructures. Is it implemented in Python.
 PyCMG allows users to generate a custom concrete mesostructure using a CSV file.
@@ -39,4 +39,4 @@ If you have any difficulties please do not hesitate to contact us. For issues pl
 This software is partially supported by the German Research Foundation (DFG) within the framework of the sub-project FOR CODA.
 
 ## License
-[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
+[GNU GPLv3](https://github.com/jtimo/pycmg/blob/main/LICENSE)

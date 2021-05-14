@@ -164,269 +164,9 @@
   <div class="section" id="module-inclusion">
 <span id="inclusion-module"></span><h1>inclusion module<a class="headerlink" href="#module-inclusion" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="inclusion.Cylinder">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">inclusion.</span></code><code class="sig-name descname"><span class="pre">Cylinder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Cylinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#inclusion.Inclusion" title="inclusion.Inclusion"><code class="xref py py-class docutils literal notranslate"><span class="pre">inclusion.Inclusion</span></code></a></p>
-<p>Class for cylinder</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Radius of the cross-section of the cylinder along direction-1</p></li>
-<li><p><strong>b</strong> (<em>float</em><em>, </em><em>default: b=a</em>) -- Radius of the cross-section of the cylinder along direction-2</p></li>
-<li><p><strong>c</strong> (<em>float</em><em>, </em><em>default: c=a</em>) -- Half of the length of the cylinder</p></li>
-<li><p><strong>coat</strong> (<em>bool</em><em>, </em><em>default:False</em>) -- Coating on inclusion, True/False</p></li>
-<li><p><strong>t_coat</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of coating on the cylinder</p></li>
-<li><p><strong>space</strong> (<em>bool</em><em>, </em><em>default:False</em>) -- Space (like coating) on the cylinder, True/False. This spacing creates gap between inclusion when assembled in the main meso/microstructure.</p></li>
-<li><p><strong>t_space</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of spacing on the cylinder</p></li>
-<li><p><strong>vox_inc</strong> (<em>bool/int</em><em>,  </em><em>default:1</em>) -- Voxel value to represent the cylinder</p></li>
-<li><p><strong>vox_coat</strong> (<em>bool/int</em><em>, </em><em>default:2</em>) -- Voxel value to represent coating on the cylinder</p></li>
-<li><p><strong>vox_space</strong> (<em>bool/int</em><em>, </em><em>default:3</em>) -- Voxel value to represent spacing on the cylinder</p></li>
-<li><p><strong>x0</strong> (<em>array of type float</em><em>, </em><em>size 3</em>) -- Position of the inclusion to be assembled in the micro/meesostructure</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="inclusion.Cylinder.apply_coating">
-<code class="sig-name descname"><span class="pre">apply_coating</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Cylinder.apply_coating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Cylinder.apply_coating" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply coating/spacing on top of the inclusion for the required thickness 't_coat/t_space</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mat_inc</strong> (<em>3D array of type int</em>) -- This 3D array gives voxel representation of the clyinder on top of which the coating is applied.</p></li>
-<li><p><strong>a</strong> (<em>float</em>) -- Radius of the cross-section of the cylinder along direction-1</p></li>
-<li><p><strong>b</strong> (<em>float</em><em>,</em>) -- Radius of the cross-section of the cylinder along direction-2</p></li>
-<li><p><strong>c</strong> (<em>float</em>) -- Half of the length of the cylinder</p></li>
-<li><p><strong>theta_inc</strong> (<em>array of size 3</em><em>, </em><em>type-float between 0 to 2pi</em>) -- 3D angle of the cylinder</p></li>
-<li><p><strong>t_coat</strong> (<em>float</em>) -- Thickness of the coating on top of the cylinder.</p></li>
-<li><p><strong>vox</strong> (<em>int</em>) -- Voxel value to represent the coating/space.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>mat_inc</strong> (<em>3D array of type int</em>) -- 3D array reprsenting cylinder with coating/spacing.</p></li>
-<li><p><strong>a,b,c</strong> (<em>float</em>) -- New dimensions of cylinder with coat/spacing</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Cylinder.generate_cylinder">
-<code class="sig-name descname"><span class="pre">generate_cylinder</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Cylinder.generate_cylinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Cylinder.generate_cylinder" title="Permalink to this definition">¶</a></dt>
-<dd><p>generate cylinder for the given length. Cylinder cross section will have ellipse shape with radius as major axis and radius*aspRat_1 as the minor axis.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>float</em>) -- Radius of the cross-section of the cylinder along direction-1</p></li>
-<li><p><strong>b</strong> (<em>float</em><em>,</em>) -- Radius of the cross-section of the cylinder along direction-2</p></li>
-<li><p><strong>c</strong> (<em>float</em>) -- Half of the length of the cylinder</p></li>
-<li><p><strong>theta_inc</strong> (<em>array of size 3</em><em> (</em><em>float</em><em>) </em><em>between 0 to 2pi</em>) -- 3D angle of cylinder.</p></li>
-<li><p><strong>vox</strong> (<em>int</em>) -- voxel value to represent cylinder shape.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mat_inc</strong> -- 3D voxel representation of cylinder</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>3D array (int/bool)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Cylinder.generate_inclusion_matrix">
-<code class="sig-name descname"><span class="pre">generate_inclusion_matrix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Cylinder.generate_inclusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Cylinder.generate_inclusion_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>This method takes inputs from self and generates cylinder with/without coating and space</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Cylinder.generate_new_inclusion">
-<code class="sig-name descname"><span class="pre">generate_new_inclusion</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Cylinder.generate_new_inclusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Cylinder.generate_new_inclusion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiate new cylinder object and generates the matrix</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="inclusion.Ellipsoid">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">inclusion.</span></code><code class="sig-name descname"><span class="pre">Ellipsoid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Ellipsoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#inclusion.Inclusion" title="inclusion.Inclusion"><code class="xref py py-class docutils literal notranslate"><span class="pre">inclusion.Inclusion</span></code></a></p>
-<p>Class for ellipsoid</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Radius of the inclusion along direction-1</p></li>
-<li><p><strong>b</strong> (<em>float</em><em>, </em><em>default: b=a</em>) -- Radius of the inclusion along direction-2</p></li>
-<li><p><strong>c</strong> (<em>float</em><em>, </em><em>default: c=a</em>) -- Radius of the inclusion along direction-3</p></li>
-<li><p><strong>coat</strong> (<em>bool</em><em>, </em><em>default:False</em>) -- Coating on inclusion, True/False.</p></li>
-<li><p><strong>t_coat</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of coating on the ellipsoid.</p></li>
-<li><p><strong>space</strong> (<em>bool</em><em>, </em><em>default:False</em>) -- Space (like coating) on the ellipsoid, True/False. This spacing creates gap between inclusion when assembled in the main meso/microstructure.</p></li>
-<li><p><strong>t_space</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of spacing on the ellipsoid.</p></li>
-<li><p><strong>vox_inc</strong> (<em>bool/int</em><em>,  </em><em>default:1</em>) -- Voxel value to represent the ellipsoid.</p></li>
-<li><p><strong>vox_coat</strong> (<em>bool/int</em><em>, </em><em>default:2</em>) -- Voxel value to represent coating on the ellipsoid.</p></li>
-<li><p><strong>vox_space</strong> (<em>bool/int</em><em>, </em><em>default:3</em>) -- Voxel value to represent spacing on the ellipsoid.
-concave:    bool, default: False
-Provision to apply coating on the ellipsoid, True/False.</p></li>
-<li><p><strong>n_concave</strong> (<em>int</em><em>, </em><em>default:0</em>) -- Number of concave depressions on the ellipsoid surface.</p></li>
-<li><p><strong>depth</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Parameter to determine depth of concave depression on the ellipsoid surface (from 0 to 1)</p></li>
-<li><p><strong>width</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Parameter to determine width of concave depression on the ellipsoid surface</p></li>
-<li><p><strong>x0</strong> (<em>array of type float</em><em>, </em><em>size 3</em>) -- Position of the inclusion to be assembled in the micro/meesostructure</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="inclusion.Ellipsoid.apply_coating">
-<code class="sig-name descname"><span class="pre">apply_coating</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Ellipsoid.apply_coating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Ellipsoid.apply_coating" title="Permalink to this definition">¶</a></dt>
-<dd><p>Apply coating/spacing on the ellipsoid surface. Spacing is equivalent to applying coating on top of the inclusion and it ensures gap between aggregates when assembled in the micro/mesostructure.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mat_inc</strong> (<em>3D array of type int</em>) -- Provides voxel representation of the ellipsoid with/without coating and spacing</p></li>
-<li><p><strong>a</strong> (<em>float</em>) -- Major/minor axis 1 of the ellipsoid.</p></li>
-<li><p><strong>b</strong> (<em>float</em><em>, </em><em>default:b=a</em>) -- Major/minor axis 2 of the ellipsoid.</p></li>
-<li><p><strong>c</strong> (<em>float</em><em>, </em><em>default:c=a</em>) -- Major/minor axis 3 of the ellipsoid.</p></li>
-<li><p><strong>theta_inc</strong> (<em>array of size</em><em> (</em><em>3</em><em>)</em><em>, </em><em>type float</em><em>, </em><em>value between 0 to 2*pi</em>) -- 3D angle of the ellipsoid
-Number of polyhedron planes.</p></li>
-<li><p><strong>t_coat</strong> (<em>float</em>) -- Thickness of the coating/spacing on top of the inclusion/ellipsoid</p></li>
-<li><p><strong>vox</strong> (<em>int</em>) -- Voxel value to represent coating / spacing</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>mat_coat</strong> (<em>3D array of type int</em>) -- New voxel representation of the ellipsoid with coat/spacing.</p></li>
-<li><p><strong>a,b,c</strong> (<em>float</em>) -- New radius of the ellipsoid with coat/spacing.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Ellipsoid.generate_ellipsoid">
-<code class="sig-name descname"><span class="pre">generate_ellipsoid</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Ellipsoid.generate_ellipsoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Ellipsoid.generate_ellipsoid" title="Permalink to this definition">¶</a></dt>
-<dd><p>generate ellipsoid for the given size. The ellipsoid will have major axis -size and minor axes as size*aspRat_1 and size*aspRat_2.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> (<em>float</em>) -- Major/minor axis 1.</p></li>
-<li><p><strong>b</strong> (<em>float</em><em>, </em><em>default:b=a</em>) -- Major/minor axis 2.</p></li>
-<li><p><strong>c</strong> (<em>float</em><em>, </em><em>default:c=a</em>) -- Major/minor axis 3</p></li>
-<li><p><strong>theta_inc</strong> (<em>array of size 3</em><em>, </em><em>type float</em>) -- 3D angle of the ellipsoid.</p></li>
-<li><p><strong>vox</strong> (<em>int</em>) -- Voxel value to represent ellipsoid shape.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mat_inc</strong> -- 3D voxel representation of ellipsoid.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>3D array (int/bool)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Ellipsoid.generate_inclusion_matrix">
-<code class="sig-name descname"><span class="pre">generate_inclusion_matrix</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Ellipsoid.generate_inclusion_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Ellipsoid.generate_inclusion_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>generate ellipsoid inclusion</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Ellipsoid.generate_new_inclusion">
-<code class="sig-name descname"><span class="pre">generate_new_inclusion</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Ellipsoid.generate_new_inclusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Ellipsoid.generate_new_inclusion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instantiate new ellipsoid object and generates the matrix</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="inclusion.Inclusion">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">inclusion.</span></code><code class="sig-name descname"><span class="pre">Inclusion</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Inclusion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Inclusion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Abstract Inclusion class which carries common parameters and methods for
-all inclusion types.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>coat</strong> (<em>bool</em><em>, </em><em>True/False</em><em>, </em><em>default:False</em>) -- Boolean for coating on the inclusion.</p></li>
-<li><p><strong>t_coat</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of the coating on inclusion.</p></li>
-<li><p><strong>space</strong> (<em>bool</em><em>, </em><em>True/False</em><em>, </em><em>default:False</em>) -- Thickness of the spacing on the inclusion which decides gap
-between the inclusion in the micro/mesostructure</p></li>
-<li><p><strong>t_space</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of the spacing on the inclusion.</p></li>
-<li><p><strong>vox_inc</strong> (<em>int</em><em>, </em><em>default:1</em>) -- Voxel value for the inclusion.</p></li>
-<li><p><strong>vox_coat</strong> (<em>int</em><em>, </em><em>default:2</em>) -- Voxel value for the coating.</p></li>
-<li><p><strong>vox_space</strong> (<em>int</em><em>, </em><em>default:3</em>) -- Voxel value for the spacing.</p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="inclusion.Inclusion.compute_vox_volume">
-<code class="sig-name descname"><span class="pre">compute_vox_volume</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Inclusion.compute_vox_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Inclusion.compute_vox_volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute voxel volume of the inclusion</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Inclusion.generate_concave_depression">
-<code class="sig-name descname"><span class="pre">generate_concave_depression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_concave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_concave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_inc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Inclusion.generate_concave_depression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Inclusion.generate_concave_depression" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate concave depression on the surface of the polyhedron</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>mat_inc</strong> (<em>3D array of type int</em>) -- Provides voxel representation of the polyhedron
-with/without coating and spacing</p></li>
-<li><p><strong>a</strong> (<em>float</em>) -- Radius of the inclusion along direction-1
-For cylinder, it is the radius of the cross-section along direction-1</p></li>
-<li><p><strong>b</strong> (<em>float</em>) -- Radius of the inclusion along direction-2
-For cylinder, it is the radius of the cross-section along direction-2</p></li>
-<li><p><strong>c</strong> (<em>float</em>) -- Radius of the inclusion along direction-3
-For cylinder, it is the half of the length</p></li>
-<li><p><strong>n_concave</strong> (<em>int</em>) -- Number of concave depressions on the polyhedron surface.</p></li>
-<li><p><strong>depth</strong> (<em>float</em>) -- Parameter determining depth of the concave depressions
-(value between 0 to 1).</p></li>
-<li><p><strong>width</strong> (<em>float</em>) -- Parameter determining width of the concave depressions.</p></li>
-<li><p><strong>theta_conave</strong> (<em>array of size</em><em> (</em><em>3</em><em>,</em><em>n_concave</em><em>)</em><em>, </em><em>type float between 0 to</em>) -- 2*pi
-Angle of concave depressions on the polyhedron surface.</p></li>
-<li><p><strong>theta_inc</strong> (<em>array of size</em><em> (</em><em>3</em><em>)</em><em>, </em><em>type float between 0 to 2*pi</em>) -- Polyhedron 3D angle</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mat_inc</strong> -- New voxel representation of the polyhedron with concave depressions.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>3D array of type int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="inclusion.Inclusion.getRotationMatrix">
-<code class="sig-name descname"><span class="pre">getRotationMatrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">th1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Inclusion.getRotationMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Inclusion.getRotationMatrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute rotation matrix for the given angles th1, th2, th3.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>th1</strong> (<em>array of size N of angles about axis-1. Values between 0 to 2pi.</em>) -- </p></li>
-<li><p><strong>th2</strong> (<em>array of size N of angles about axis-2. Values between 0 to 2pi.</em>) -- </p></li>
-<li><p><strong>th3</strong> (<em>array of size N of angles about axis-3. Values between 0 to 2pi.</em>) -- </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>Qx1</strong> (<em>array of size 3X3XN, type: float</em>) -- 3D rotation angle about axis-1 for all given angles th1.</p></li>
-<li><p><strong>Qy1</strong> (<em>array of size 3X3XN, type: float</em>) -- 3D rotation angle about axis-2 for all given angles th2.</p></li>
-<li><p><strong>Qz1</strong> (<em>array of size 3X3XN, type: float</em>) -- 3D rotation angle about axis-3 for all given angles th3.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt id="inclusion.Polyhedron">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">inclusion.</span></code><code class="sig-name descname"><span class="pre">Polyhedron</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cuts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0,</span> <span class="pre">0]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Polyhedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Polyhedron" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#inclusion.Inclusion" title="inclusion.Inclusion"><code class="xref py py-class docutils literal notranslate"><span class="pre">inclusion.Inclusion</span></code></a></p>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">inclusion.</span></code><code class="sig-name descname"><span class="pre">Polyhedron</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cuts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Polyhedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Polyhedron" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Class for irregular polyhedron</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -434,23 +174,18 @@ Angle of concave depressions on the polyhedron surface.</p></li>
 <li><p><strong>a</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Radius of the inclusion along direction-1</p></li>
 <li><p><strong>b</strong> (<em>float</em><em>, </em><em>default: b=a</em>) -- Radius of the inclusion along direction-2</p></li>
 <li><p><strong>c</strong> (<em>float</em><em>, </em><em>default: c=a</em>) -- Radius of the inclusion along direction-3</p></li>
-<li><p><strong>n_cuts</strong> (<em>int</em>) -- Number of faces for the irregular polyhedron.</p></li>
+<li><p><strong>n_cuts</strong> (<em>int</em><em>, </em><em>default:20</em>) -- Number of faces for the irregular polyhedron.</p></li>
 <li><p><strong>coat</strong> (<em>bool</em><em>, </em><em>default:False</em>) -- Coating on inclusion, True/False.</p></li>
 <li><p><strong>t_coat</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of coating on the polyhedron.</p></li>
 <li><p><strong>space</strong> (<em>bool</em><em>, </em><em>default:False</em>) -- Space (like coating) on the polyhedron, True/False.
 This spacing creates gap between inclusion when assembled in
 the main meso/microstructure.</p></li>
 <li><p><strong>t_space</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Thickness of spacing on the polyhedron.</p></li>
-<li><p><strong>vox_inc</strong> (<em>bool/int</em><em>,  </em><em>default:1</em>) -- Voxel value to represent the polyhedron.</p></li>
-<li><p><strong>vox_coat</strong> (<em>bool/int</em><em>, </em><em>default:2</em>) -- Voxel value to represent coating on the polyhedron.</p></li>
-<li><p><strong>vox_space</strong> (<em>bool/int</em><em>, </em><em>default:3</em>) -- Voxel value to represent spacing on the polyhedron.</p></li>
 <li><p><strong>concave</strong> (<em>bool</em><em>, </em><em>default: False</em>) -- Provision to apply coating on the polyhedron, True/False.</p></li>
 <li><p><strong>n_concave</strong> (<em>int</em><em>, </em><em>default:0</em>) -- Number of concave depressions on the polyhedron surface.</p></li>
 <li><p><strong>depth</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Parameter to determine depth of concave depression on the
 polyhedron surface (from 0 to 1)</p></li>
-<li><p><strong>width</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Parameter to determine width of concave depression on the
-polyhedron surface</p></li>
-<li><p><strong>x0</strong> (<em>array of type float</em><em>, </em><em>size 3</em>) -- Position of the inclusion to be assembled in the micro/meesostructure</p></li>
+<li><p><strong>width</strong> (<em>float</em><em>, </em><em>default:0</em>) -- Parameter to determine width of concave depression on the</p></li>
 </ul>
 </dd>
 </dl>
@@ -478,6 +213,45 @@ polyhedron surface</p></li>
 <li><p><strong>a,b,c</strong> (<em>float</em>) -- New raidus of the polyhedron with coat/spacing.</p></li>
 </ul>
 </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="inclusion.Polyhedron.compute_vox_volume">
+<code class="sig-name descname"><span class="pre">compute_vox_volume</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Polyhedron.compute_vox_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Polyhedron.compute_vox_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute voxel volume of the inclusion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="inclusion.Polyhedron.generate_concave_depression">
+<code class="sig-name descname"><span class="pre">generate_concave_depression</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat_inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_concave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_concave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta_inc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Polyhedron.generate_concave_depression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Polyhedron.generate_concave_depression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate concave depression on the surface of the polyhedron</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mat_inc</strong> (<em>3D array of type int</em>) -- Provides voxel representation of the polyhedron
+with/without coating and spacing</p></li>
+<li><p><strong>a</strong> (<em>float</em>) -- Radius of the inclusion along direction-1
+For cylinder, it is the radius of the cross-section along direction-1</p></li>
+<li><p><strong>b</strong> (<em>float</em>) -- Radius of the inclusion along direction-2
+For cylinder, it is the radius of the cross-section along direction-2</p></li>
+<li><p><strong>c</strong> (<em>float</em>) -- Radius of the inclusion along direction-3
+For cylinder, it is the half of the length</p></li>
+<li><p><strong>n_concave</strong> (<em>int</em>) -- Number of concave depressions on the polyhedron surface.</p></li>
+<li><p><strong>depth</strong> (<em>float</em>) -- Parameter determining depth of the concave depressions
+(value between 0 to 1).</p></li>
+<li><p><strong>width</strong> (<em>float</em>) -- Parameter determining width of the concave depressions.</p></li>
+<li><p><strong>theta_conave</strong> (<em>array of size</em><em> (</em><em>3</em><em>,</em><em>n_concave</em><em>)</em><em>, </em><em>type float between 0 to</em>) -- 2*pi
+Angle of concave depressions on the polyhedron surface.</p></li>
+<li><p><strong>theta_inc</strong> (<em>array of size</em><em> (</em><em>3</em><em>)</em><em>, </em><em>type float between 0 to 2*pi</em>) -- Polyhedron 3D angle</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mat_inc</strong> -- New voxel representation of the polyhedron with concave depressions.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>3D array of type int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,6 +290,29 @@ major axis -size and minor axes as size*aspRat_1 and size*aspRat_2.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>3D array (int/bool)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="inclusion.Polyhedron.getRotationMatrix">
+<code class="sig-name descname"><span class="pre">getRotationMatrix</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">th1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Polyhedron.getRotationMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Polyhedron.getRotationMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute rotation matrix for the given angles th1, th2, th3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>th1</strong> (<em>array of size N of angles about axis-1. Values between 0 to 2pi.</em>) -- </p></li>
+<li><p><strong>th2</strong> (<em>array of size N of angles about axis-2. Values between 0 to 2pi.</em>) -- </p></li>
+<li><p><strong>th3</strong> (<em>array of size N of angles about axis-3. Values between 0 to 2pi.</em>) -- </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>Qx1</strong> (<em>array of size 3X3XN, type: float</em>) -- 3D rotation angle about axis-1 for all given angles th1.</p></li>
+<li><p><strong>Qy1</strong> (<em>array of size 3X3XN, type: float</em>) -- 3D rotation angle about axis-2 for all given angles th2.</p></li>
+<li><p><strong>Qz1</strong> (<em>array of size 3X3XN, type: float</em>) -- 3D rotation angle about axis-3 for all given angles th3.</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>

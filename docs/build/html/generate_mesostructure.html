@@ -189,28 +189,7 @@
 
 <dl class="py method">
 <dt id="generate_mesostructure.Mesostructure.assemble_SRA">
-<code class="sig-name descname"><span class="pre">assemble_SRA</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attempt_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/generate_mesostructure.html#Mesostructure.assemble_SRA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#generate_mesostructure.Mesostructure.assemble_SRA" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assemble aggregates/pores onto the mesostructure 3D matrix using Semi-Random Assembly (SRA) algorithm.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>attempt_max</strong> (<em>int</em><em>, </em><em>default:50000</em>) -- Maximum number of unsuccessfull assembly attempts before temrinating the assembly algorithm.</p></li>
-<li><p><strong>threshold</strong> (<em>int</em><em>, </em><em>default:50</em>) -- Number of unsuccessfull attempts after which the algorithm shifts to SRA (alorithm type-2) from RSA (algorithm type-1)</p></li>
-<li><p><strong>iter_limit</strong> (<em>int</em><em>, </em><em>default:10</em>) -- Number of unsuccessfull attempts to try with the same particle/aggregate orientation before switching to another random orientation.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>mat_meso</strong> -- Mesostructure 3D array with aggregates/pores/particles assembled inside.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>3D array of type int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="generate_mesostructure.Mesostructure.assemble_manually">
-<code class="sig-name descname"><span class="pre">assemble_manually</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/generate_mesostructure.html#Mesostructure.assemble_manually"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#generate_mesostructure.Mesostructure.assemble_manually" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">assemble_SRA</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attempt_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iter_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/generate_mesostructure.html#Mesostructure.assemble_SRA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#generate_mesostructure.Mesostructure.assemble_SRA" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assemble aggregates/pores onto the mesostructure 3D matrix using Semi-Random Assembly (SRA) algorithm.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
