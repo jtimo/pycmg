@@ -1,4 +1,4 @@
-generate\_mesostructure module
+Generating the Mesostructure
 ==============================
 
 .. automodule:: generate_mesostructure

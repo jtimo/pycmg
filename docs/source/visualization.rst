@@ -1,5 +1,5 @@
-visualization module
-====================
+Visualization and Export
+========================
 
 .. automodule:: visualization
    :members:

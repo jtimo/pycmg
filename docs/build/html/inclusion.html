@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>inclusion module &mdash; PyCMG 1.0 documentation</title>
+  <title>Aggregate Design &mdash; PyCMG 1.0 documentation</title>
   
 
   
@@ -38,8 +38,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="visualization module" href="visualization.html" />
-    <link rel="prev" title="generate_mesostructure module" href="generate_mesostructure.html" /> 
+    <link rel="next" title="Visualization and Export" href="visualization.html" />
+    <link rel="prev" title="Generating the Mesostructure" href="generate_mesostructure.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -85,13 +85,16 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pycmg</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="configuration.html">configuration module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="generate_mesostructure.html">generate_mesostructure module</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">inclusion module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="visualization.html">visualization module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Quickstart tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="configuration.html">Configuring the Mesostructure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_mesostructure.html">Generating the Mesostructure</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Aggregate Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualization.html">Visualization and Export</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developers</a></li>
 </ul>
 
             
@@ -140,9 +143,9 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="modules.html">pycmg</a> &raquo;</li>
+          <li><a href="modules.html">Documentation</a> &raquo;</li>
         
-      <li>inclusion module</li>
+      <li>Aggregate Design</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,7 +165,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-inclusion">
-<span id="inclusion-module"></span><h1>inclusion module<a class="headerlink" href="#module-inclusion" title="Permalink to this headline">¶</a></h1>
+<span id="aggregate-design"></span><h1>Aggregate Design<a class="headerlink" href="#module-inclusion" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="inclusion.Polyhedron">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">inclusion.</span></code><code class="sig-name descname"><span class="pre">Polyhedron</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_cuts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_concave</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_inc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_coat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vox_space</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/inclusion.html#Polyhedron"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#inclusion.Polyhedron" title="Permalink to this definition">¶</a></dt>
@@ -327,8 +330,8 @@ major axis -size and minor axes as size*aspRat_1 and size*aspRat_2.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="visualization.html" class="btn btn-neutral float-right" title="visualization module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="generate_mesostructure.html" class="btn btn-neutral float-left" title="generate_mesostructure module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="visualization.html" class="btn btn-neutral float-right" title="Visualization and Export" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="generate_mesostructure.html" class="btn btn-neutral float-left" title="Generating the Mesostructure" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

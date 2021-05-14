@@ -1,5 +1,5 @@
-configuration module
-====================
+Configuring the Mesostructure
+=============================
 
 .. automodule:: configuration
    :members:

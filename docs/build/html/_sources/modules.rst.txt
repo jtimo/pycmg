@@ -1,5 +1,5 @@
-pycmg
-=====
+Documentation
+=============
 
 .. toctree::
    :maxdepth: 4

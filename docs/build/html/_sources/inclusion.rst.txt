@@ -1,5 +1,5 @@
-inclusion module
-================
+Aggregate Design
+=================
 
 .. automodule:: inclusion
    :members:

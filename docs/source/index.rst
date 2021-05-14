@@ -6,7 +6,8 @@
 Concrete Mesostructure Generation using Python
 ==============================================
 
-
+PyCMG is an open source software package for generating synthetic concrete mesostructures. Is it implemented in Python.
+PyCMG allows users to generate a custom concrete mesostructure using a CSV file.
 
 .. toctree::
    :maxdepth: 3
@@ -14,6 +15,7 @@ Concrete Mesostructure Generation using Python
    installation.rst
    tutorial.rst
    modules.rst
+   developers.rst
 
 
 Indices and tables
