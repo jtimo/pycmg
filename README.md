@@ -39,4 +39,4 @@ If you have any difficulties please do not hesitate to contact us. For issues pl
 This software is partially supported by the German Research Foundation (DFG) within the framework of the sub-project FOR CODA.
 
 ## License
-[GNU GPLv3](https://github.com/jtimo/pycmg/blob/main/LICENSE)
+[MIT](https://github.com/jtimo/pycmg/blob/main/LICENSE)
