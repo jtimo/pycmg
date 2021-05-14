@@ -15,7 +15,7 @@ class Polyhedron():
                 Radius of the inclusion along direction-2
     c:          float, default: c=a
                 Radius of the inclusion along direction-3
-    n_cuts:     int
+    n_cuts:     int, default:20
                 Number of faces for the irregular polyhedron.
     coat:       bool, default:False
                 Coating on inclusion, True/False.
@@ -40,7 +40,7 @@ class Polyhedron():
     '''
 
     def __init__(self, a=0, b=None, c=None, coat=False, t_coat=0,
-                 space=False, t_space=0, n_cuts=10, concave=False, n_concave=0, depth=0, width=0, vox_inc=1, vox_coat=2, vox_space=3):
+                 space=False, t_space=0, n_cuts=20, concave=False, n_concave=0, depth=0, width=0, vox_inc=1, vox_coat=2, vox_space=3):
 
         self.a = float(a)
         self.b = float(b)
