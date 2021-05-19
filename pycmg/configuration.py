@@ -12,11 +12,11 @@ class Configuration:
     '''
 
     def __init__(self,vf_max_assembly=0.3, average_shape=False):
-        self.inclusionFamList = []
-        self.inclusionFamIdList = []
-        self.inclusionVolumeList = []
-        self.inclusionSizeList = []
-        self.inclusionFamId_count = 0
+        self.inclusion_fam_list = []
+        self.inclusion_fam_id_list = []
+        self.inclusion_vol_list = []
+        self.inclusion_size_list = []
+        self.inclusion_fam_id_count = 0
         self.vf_max_assembly = vf_max_assembly
         self.average_shape = average_shape
 
@@ -64,12 +64,12 @@ class Configuration:
         conf_values=np.array(conf_values)
         for i in range(np.shape(conf_values)[0]):
             aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
-            self.inclusionFamIdList.append(self.inclusionFamId_count)
-            self.inclusionSizeList.append(max(aggr.a, aggr.b, aggr.c))
-            self.inclusionFamList.append(aggr)
-            self.inclusionFamId_count += 1
+            self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
+            self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
+            self.inclusion_fam_list.append(aggr)
+            self.inclusion_fam_id_count += 1
 
-        self.inclusion_sorted = np.array(self.inclusionFamIdList)
+        self.inclusion_sorted = np.array(self.inclusion_fam_id_list)
 
 
 class InclusionFamily:
@@ -82,7 +82,7 @@ class InclusionFamily:
                       Aspect ration of the inclusion along all three axes (value between 0-1).
     Id:               int, default: None
                       Id of the inclusion family.
-    inclusionList:    array/list (1D)
+    inclusion_list:   array/list (1D)
                       Gives list of inclusions belonging to the current family.
     vf_max:           float, value between 0 to 1, default:1.0
                       Maximum volume fraction of the inclusion family.
@@ -114,12 +114,12 @@ class InclusionFamily:
     kwargs:           Other parameters, default:None
     
     '''
-    def __init__(self, average_shape=False, Id=None, inclusionList=[],
+    def __init__(self, average_shape=False, Id=None, inclusion_list=[],
                  vf_max=1, a=10, b=0, c=0, n_cuts=10, concave=False, n_concave=0,
                  depth=0, width=0, coat=False,
                  t_coat=0, space=False, t_space=0, x=0, y=0, z=0,
                  kwargs=None):
-        self.inclusionList = inclusionList
+        self.inclusion_list = inclusion_list
         self.vf_max = vf_max
         self.a = a
         self.b = b

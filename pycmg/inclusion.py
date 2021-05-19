@@ -104,13 +104,13 @@ class Polyhedron():
             
         dia = np.array(np.shape(self.mat_inc))
         u = np.array([1, 0, 0])
-        R = np.array([[rx, 0, 0], [0, ry, 0], [0, 0, rz]])
-        delEl = lambda x, y, z: np.array([(2.0 / rx ** 2) * x, (2.0 / ry ** 2) * y, (2.0 / rz ** 2) * z])
-        Qx, Qy, Qz = self.__getRotationMatrix(theta_inc[2:3], theta_inc[1:2], theta_inc[0:1])
-        P = np.copy(Qx[0, :, :].dot((Qy[0, :, :]).dot(Qz[0, :, :])))
-        Qx, Qy, Qz = self.__getRotationMatrix(theta_faces[2, :], theta_faces[1, :], theta_faces[0, :])
-        X = np.einsum('ab, ibc, icd, ide, e->ai', R, Qx, Qy, Qz, u, optimize='greedy')
-        delF = np.transpose(np.einsum('ab, bi->ai', P, delEl(X[0, :], X[1, :], X[2, :])))
+        r_mat = np.array([[rx, 0, 0], [0, ry, 0], [0, 0, rz]])
+        del_el = lambda x, y, z: np.array([(2.0 / rx ** 2) * x, (2.0 / ry ** 2) * y, (2.0 / rz ** 2) * z])
+        qx_rot, qy_rot, qz_rot = self.__get_rotation_matrix(theta_inc[2:3], theta_inc[1:2], theta_inc[0:1])
+        p_rot = np.copy(qx_rot[0, :, :].dot((qy_rot[0, :, :]).dot(qz_rot[0, :, :])))
+        qx_rot, qy_rot, qz_rot = self.__get_rotation_matrix(theta_faces[2, :], theta_faces[1, :], theta_faces[0, :])
+        x_vector = np.einsum('ab, ibc, icd, ide, e->ai', r_mat, qx_rot, qy_rot, qz_rot, u, optimize='greedy')
+        delF = np.transpose(np.einsum('ab, bi->ai', p_rot, del_el(x_vector[0, :], x_vector[1, :], x_vector[2, :])))
         idd = (dia - 1) / 2
         coords = np.meshgrid(np.arange(0, dia[0]), np.arange(0, dia[1]), np.arange(0, dia[2]))
         [x, y, z] = [coords[0].ravel().astype(int), coords[1].ravel().astype(int), coords[2].ravel().astype(int)]
@@ -120,7 +120,7 @@ class Polyhedron():
         self.mat_inc[x[inside], y[inside], z[inside]] = int(vox)
         return self.mat_inc, delF
 
-    def __apply_coating(self, mat_inc, rx, ry, rz, delF, n_cut, t_coat, vox):
+    def __apply_coating(self, mat_inc, rx, ry, rz, grad_vector, n_cut, t_coat, vox):
         ''' 
         Apply coating/spacing on the polyhedron surface. Spacing is equivalent to applying coating on top of the inclusion and it ensures gap between aggregates when assembled in the micro/mesostructure.
 
@@ -134,7 +134,7 @@ class Polyhedron():
                         Major/minor axis 2 of the polyhedron.
         rz:             float
                         Major/minor axis 3 of the polyhedron.
-        delF:           array of type float
+        grad_vector:    array of type float
                         Gradient vector for all polyhedron planes.
         n_cut:          int
                         Number of polyhedron planes.
@@ -162,19 +162,19 @@ class Polyhedron():
         coords = np.meshgrid(np.arange(0, dia[0]), np.arange(0, dia[1]), np.arange(0, dia[2]))
         [x, y, z] = [coords[0].ravel().astype(int), coords[1].ravel().astype(int), coords[2].ravel().astype(int)]
         points = np.transpose(np.array([coords[0].ravel(), coords[1].ravel(), coords[2].ravel()]).astype(float)) - idd
-        delF = delF / rat_coat
-        check_coat = np.einsum('ij, kj->ik', delF, points) <= 2
+        grad_vector = grad_vector / rat_coat
+        check_coat = np.einsum('ij, kj->ik', grad_vector, points) <= 2
         inside = np.logical_and(mat_coat[x, y, z] == 0, np.sum(check_coat, 0) == n_cut)
         mat_coat[x[inside], y[inside], z[inside]] = int(vox)
         rx, ry, rz = rx + t_coat, ry + t_coat, rz + t_coat
-        return mat_coat, delF, rx, ry, rz
+        return mat_coat, grad_vector, rx, ry, rz
 
     def generate_inclusion_matrix(self):
         '''
         generate polyhedron inclusion
         '''
 
-        N = self.n_cuts
+        n_cuts = self.n_cuts
         theta = np.random.random((3, self.n_cuts)) * 2 * pi
         self.theta = theta
         beta = np.random.random((3)) * 2 * pi
@@ -183,24 +183,24 @@ class Polyhedron():
         b = np.copy(self.b);
         c = np.copy(self.c)
         rx = a/2.0; ry = b/2.0; rz = c/2.0
-        mat_inc, delF = self.__generate_polyhedron(rx, ry, rz, N, theta, beta, self.vox_inc)
+        mat_inc, grad_vector = self.__generate_polyhedron(rx, ry, rz, n_cuts, theta, beta, self.vox_inc)
         if self.concave is True:
             eta = np.random.random((3, self.n_concave)) * 2 * pi
             if self.coat is True:
                 if self.space is True:
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_coat)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_coat)
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_space)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_space)
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
 
                 else:
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_coat)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_coat)
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
 
@@ -208,7 +208,7 @@ class Polyhedron():
                 if self.space is True:
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_space)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_space)
                     mat_inc = self.__generate_concave_depression(mat_inc, rx, ry, rz, self.n_concave, self.depth, self.width,
                                                                eta, beta)
 
@@ -219,13 +219,13 @@ class Polyhedron():
         else:
             if self.coat is True:
                 if self.space is True:
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_coat)
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_space)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_coat)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_space)
                 else:
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_coat, self.vox_coat)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_coat, self.vox_coat)
             else:
                 if self.space is True:
-                    mat_inc, delF, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, delF, N, self.t_space, self.vox_space)
+                    mat_inc, grad_vector, rx, ry, rz = self.__apply_coating(mat_inc, rx, ry, rz, grad_vector, n_cuts, self.t_space, self.vox_space)
 
         self.mat_inc = mat_inc
         return mat_inc
@@ -247,7 +247,7 @@ class Polyhedron():
         '''  Compute voxel volume of the inclusion  '''
         self.vol_vox = np.sum(self.mat_inc == self.vox_inc) + np.sum(self.mat_inc == self.vox_coat)
 
-    def __getRotationMatrix(self, th1, th2, th3):
+    def __get_rotation_matrix(self, th1, th2, th3):
         '''
         Compute rotation matrix for the given angles th1, th2, th3.
 
@@ -259,25 +259,25 @@ class Polyhedron():
         
         Return
         ------
-        Qx:    array of size 3X3XN, type: float
+        qx_rpt: array of size 3X3XN, type: float
                 3D rotation angle about axis-1 for all given angles th1.
-        Qy:    array of size 3X3XN, type: float
+        qy_rot: array of size 3X3XN, type: float
                 3D rotation angle about axis-2 for all given angles th2.
-        Qz:    array of size 3X3XN, type: float
+        qz_rot: array of size 3X3XN, type: float
                 3D rotation angle about axis-3 for all given angles th3.  
         '''
-        Qz = np.transpose(np.array([[np.cos(th1), -np.sin(th1), np.zeros((np.size(th1)))],
+        qz_rot = np.transpose(np.array([[np.cos(th1), -np.sin(th1), np.zeros((np.size(th1)))],
                                      [np.sin(th1), np.cos(th1), np.zeros((np.size(th1)))],
                                      [np.zeros((np.size(th1))), np.zeros((np.size(th1))), np.ones((np.size(th1)))]]),
                            (2, 0, 1))
-        Qy = np.transpose(np.array([[np.cos(th2), np.zeros((np.size(th2))), np.sin(th2)],
+        qy_rot = np.transpose(np.array([[np.cos(th2), np.zeros((np.size(th2))), np.sin(th2)],
                                      [np.zeros((np.size(th2))), np.ones((np.size(th2))), np.zeros((np.size(th2)))],
                                      [-np.sin(th2), np.zeros((np.size(th2))), np.cos(th2)]]), (2, 0, 1))
-        Qx = np.transpose(np.array([[np.ones(np.size(th3)), np.zeros((np.size(th3))), np.zeros((np.size(th3)))],
+        qx_rot = np.transpose(np.array([[np.ones(np.size(th3)), np.zeros((np.size(th3))), np.zeros((np.size(th3)))],
                                      [np.zeros((np.size(th3))), np.cos(th3), -np.sin(th3)],
                                      [np.zeros((np.size(th3))), np.sin(th3), np.cos(th3)]]), (2, 0, 1))
 
-        return Qx, Qy, Qz
+        return qx_rot, qy_rot, qz_rot
 
     def __generate_concave_depression(self, mat_inc, rx, ry, rz, n_concave, depth, width, theta_concave, theta_inc):
         '''
@@ -318,12 +318,12 @@ class Polyhedron():
         dia = np.shape(mat_inc)
 
         u = np.array([1, 0, 0]);
-        R = np.array([[rx, 0, 0], [0, ry, 0], [0, 0, rz]])
-        Qx, Qy, Qz = self.__getRotationMatrix(theta_inc[2:3], theta_inc[1:2], theta_inc[0:1])
-        P = np.copy(Qx[0, :, :].dot((Qy[0, :, :]).dot(Qz[0, :, :])))
-        Qx, Qy, Qz = self.__getRotationMatrix(theta_concave[2, :], theta_concave[1, :], theta_concave[0, :])
-        Xnorm = np.sqrt(
-            np.sum(np.square(np.einsum('ab, bc, icd, ide, ief, f->ai', P, R, Qx, Qy, Qz, u, optimize='greedy')), 0))
+        r_mat = np.array([[rx, 0, 0], [0, ry, 0], [0, 0, rz]])
+        qx_rot, qy_rot, qz_rot = self.__getRotationMatrix(theta_inc[2:3], theta_inc[1:2], theta_inc[0:1])
+        p_rot = np.copy(qx_rot[0, :, :].dot((qy_rot[0, :, :]).dot(qz_rot[0, :, :])))
+        qx_rot, qy_rot, qz_rot = self.__get_rotation_matrix(theta_concave[2, :], theta_concave[1, :], theta_concave[0, :])
+        xnorm_vector = np.sqrt(
+            np.sum(np.square(np.einsum('ab, bc, icd, ide, ief, f->ai', p_rot, r_mat, qx_rot, qy_rot, qz_rot, u, optimize='greedy')), 0))
         idd = (np.array(dia) - 1) / 2
         coords = np.meshgrid(np.arange(0, dia[0]), np.arange(0, dia[1]), np.arange(0, dia[2]))
         [x, y, z] = [coords[0].ravel().astype(int), coords[1].ravel().astype(int), coords[2].ravel().astype(int)]
@@ -332,12 +332,12 @@ class Polyhedron():
         if width == 0 or depth == 0:
             raise Exception('concave depth and width values cannot be zero')
 
-        kc = np.einsum('ma, iab, ibc, icd, jd->imj', P, Qx, Qy, Qz, points, optimize='greedy')
+        kc = np.einsum('ma, iab, ibc, icd, jd->imj', p_rot, qx_rot, qy_rot, qz_rot, points, optimize='greedy')
         g1 = 0.1*(kc[:, 1, :] ** 2) / width
         g2 = 0.1*(kc[:, 2, :] ** 2) / width
         g3 = kc[:, 0, :]
-        gauss = np.einsum('i, ia->ia', -depth * Xnorm.ravel(), np.exp(-(g1 + g2)), optimize='greedy') - g3
-        check_concave = gauss > (-Xnorm.ravel())[:, None]
+        gauss = np.einsum('i, ia->ia', -depth * xnorm_vector.ravel(), np.exp(-(g1 + g2)), optimize='greedy') - g3
+        check_concave = gauss > (-xnorm_vector.ravel())[:, None]
         outside = np.logical_and(mat_inc[x, y, z] != 0, np.sum(check_concave, 0) != n_concave)
         mat_inc[x[outside], y[outside], z[outside]] = 0
         return mat_inc
