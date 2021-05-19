@@ -56,7 +56,7 @@ class Mesostructure:
         for i in range(len(config)):
             self.vf_max.append(config[i].vf_max_assembly)
     
-    def assemble_SRA(self, attempt_max=500000, threshold=50, iter_limit=10):
+    def assemble_sra(self, attempt_max=500000, threshold=50, iter_limit=10):
         '''
         Assemble aggregates/pores onto the mesostructure 3D matrix using Semi-Random Assembly (SRA) algorithm.
 
