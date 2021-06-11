@@ -167,11 +167,11 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">vf_max_assembly</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">average_shape</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamList</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionVolumeList</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionSizeList</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamId_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_id_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_vol_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_size_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_id_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vf_max_assembly</span> <span class="o">=</span> <span class="n">vf_max_assembly</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">average_shape</span> <span class="o">=</span> <span class="n">average_shape</span>
 
@@ -184,23 +184,23 @@
 <span class="sd">           :file: ../examples/AB8_CMG_full.csv</span>
 <span class="sd">           :header-rows: 1</span>
 <span class="sd">           :class: longtable</span>
-<span class="sd">           :widths: 1,1,1,1,1,1,1,1,1,1,1,1,1</span>
+<span class="sd">           :widths: 1,1,1,1,1,1,1,1,1,1,1,1</span>
 
 <span class="sd">        .. note::</span>
 <span class="sd">          **The header of the parameters in the csv file should be as follows:**</span>
 
-<span class="sd">          - a:              radius of the inclusion along direction-1. For cylinder, it is the radius of the cross-section along direction-1</span>
-<span class="sd">          - b:              radius of the inclusion along direction-2. For cylinder, it is the radius of the cross-section along direction-2</span>
-<span class="sd">          - c:              radius of the inclusion along direction-3. For cylinder, it is the half of the length</span>
-<span class="sd">          - n_cuts:         Number of faces/cuts for the polyhedron shaped aggregates (not applicable for other shapes).</span>
-<span class="sd">          - concave:        Yes/No. Provision for concave depressions on the aggregates (not applicable for cylindrical shaped aggregates)</span>
-<span class="sd">          - n_concave:      Number of concave depressions on each aggregate surface (not applicable for cylindrical shaped aggregates).</span>
-<span class="sd">          - depth:          A parameter which determines depth of the concave depression on the aggregate surface (not applicable for cylindrical shaped aggregates). Values should be between 0 to 1 (0 lowest, 1 highest).</span>
-<span class="sd">          - width:          A parameter which determines width of the concave depression on the aggregate surface (not applicable for cylinderical shaped aggregates).</span>
+<span class="sd">          - a:              diameter of the inclusion along direction-1 in actual units (mm/cm etc.).</span>
+<span class="sd">          - b:              diameter of the inclusion along direction-2 in actual units (mm/cm etc.).</span>
+<span class="sd">          - c:              diameter of the inclusion along direction-3 in actual units (mm/cm etc.).</span>
+<span class="sd">          - n_cuts:         Number of faces/cuts for the polyhedron shaped aggregates.</span>
+<span class="sd">          - concave:        Yes/No. Provision for concave depressions on the aggregates.</span>
+<span class="sd">          - n_concave:      Number of concave depressions on each aggregate surface in actual units (mm/cm etc.).</span>
+<span class="sd">          - depth:          A parameter which determines depth of the concave depression on the aggregate surface. Values should be between 0 to 1 (0 lowest, 1 highest).</span>
+<span class="sd">          - width:          A parameter which determines width of the concave depression on the aggregate surface.</span>
 <span class="sd">          - coat:           Yes/No. Provision for the coating on the aggregate surface.</span>
-<span class="sd">          - t_coat:         Thickness of the coating on the aggregate surface.</span>
+<span class="sd">          - t_coat:         Thickness of the coating on the aggregate surface in actual units (mm/cm etc.).</span>
 <span class="sd">          - space:          Yes/No. Provision for the spacing on the aggregate surface. Spacing is like a coat on top of the aggregate which provides minimum gap between each inclusion in the mesostructure.</span>
-<span class="sd">          - t_space:        Thickness of the spacing on the aggregate surface.</span>
+<span class="sd">          - t_space:        Thickness of the spacing on the aggregate surface in actual units (mm/cm etc.).</span>
 <span class="sd">          - vf_max:         Maximum volume fraction of each sized aggregates (value between 0 to 1).</span>
 
 <span class="sd">        :param conf_header: If not csv, then a header with parameter names as given above and corresponding array of values have to be loaded.</span>
@@ -219,33 +219,12 @@
         <span class="n">conf_values</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">conf_values</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
             <span class="n">aggr</span> <span class="o">=</span> <span class="n">InclusionFamily</span><span class="p">(</span><span class="n">average_shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">average_shape</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">conf_header</span><span class="p">,</span> <span class="n">conf_values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamId_count</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionSizeList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">a</span><span class="p">,</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">b</span><span class="p">,</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">c</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionVolumeList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aggr</span><span class="o">.</span><span class="n">standard_inclusion</span><span class="o">.</span><span class="n">vol_vox</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aggr</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamId_count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_id_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_id_count</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_size_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">aggr</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">aggr</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">aggr</span><span class="o">.</span><span class="n">c</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">aggr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_id_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Configuration.sort_inclusions"><a class="viewcode-back" href="../configuration.html#configuration.Configuration.sort_inclusions">[docs]</a>    <span class="k">def</span> <span class="nf">sort_inclusions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sort_type</span><span class="o">=</span><span class="s1">&#39;size&#39;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Sort aggregates in descending order according to the given sort_type</span>
-<span class="sd">        Parameters</span>
-
-<span class="sd">        :param sort_type: string either &#39;volume&#39; or &#39;size&#39;, defaults to &#39;size&#39;</span>
-<span class="sd">        :type sort_type: string, optional</span>
-
-<span class="sd">        &#39;&#39;&#39;</span>
-
-        <span class="k">if</span> <span class="n">sort_type</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
-            <span class="n">sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionVolumeList</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
-            <span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="p">)[</span><span class="n">sort</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-
-        <span class="k">if</span> <span class="n">sort_type</span> <span class="o">==</span> <span class="s1">&#39;size&#39;</span><span class="p">:</span>
-            <span class="n">sort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionSizeList</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
-            <span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusionFamIdList</span><span class="p">)[</span><span class="n">sort</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">inclusion_sorted</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inclusion_fam_id_list</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="InclusionFamily"><a class="viewcode-back" href="../configuration.html#configuration.InclusionFamily">[docs]</a><span class="k">class</span> <span class="nc">InclusionFamily</span><span class="p">:</span>
@@ -254,49 +233,48 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    average_shape:    array of size (3),float</span>
+<span class="sd">                      Aspect ration of the inclusion along all three axes (value between 0-1).</span>
 <span class="sd">    Id:               int, default: None</span>
 <span class="sd">                      Id of the inclusion family.</span>
-<span class="sd">    inclusionList:    array/list (1D)</span>
+<span class="sd">    inclusion_list:   array/list (1D)</span>
 <span class="sd">                      Gives list of inclusions belonging to the current family.</span>
 <span class="sd">    vf_max:           float, value between 0 to 1, default:1.0</span>
 <span class="sd">                      Maximum volume fraction of the inclusion family.</span>
 <span class="sd">    a:                float, default:10</span>
-<span class="sd">                      Radius of the inclusion along direction-1</span>
-<span class="sd">                      For cylinder it is the radius of the cross-section along direction-1.</span>
-<span class="sd">    b:                Radius of the inclusion along direction-2</span>
-<span class="sd">                      For cylinder it is the radius of the cross-section along direction-2.</span>
-<span class="sd">    c:                Radius of the inclusion along direction-3</span>
-<span class="sd">                      For cylinder it is the half of the length.</span>
+<span class="sd">                      Diameter of the inclusion along direction-1 in actual units (mm/cm).</span>
+<span class="sd">    b:                float, default:b=a* average_shape[1]         </span>
+<span class="sd">                      Diameter of the inclusion along direction-2 in actual units (mm/cm).</span>
+<span class="sd">    c:                float, default:c=a* average_shape[2]</span>
+<span class="sd">                      Diameter of the inclusion along direction-3 in actual units (mm/cm).</span>
 <span class="sd">    n_cuts:           int, default:10</span>
-<span class="sd">                      Number of faces of the irregular polyhedron. Doesnt apply for ellipsoid/sphere/cylinder.</span>
+<span class="sd">                      Number of faces of the irregular polyhedron.</span>
 <span class="sd">    concave:          bool, True/False, default:False</span>
-<span class="sd">                      Boolean for concave depression on inclusion surface. Not applicable for cylinder shape.</span>
+<span class="sd">                      Boolean for concave depression on inclusion surface.</span>
 <span class="sd">    n_concave:        int, default:0</span>
-<span class="sd">                      Number of concave depressions on the inclusion surface. Not applicable for cylinder shape.</span>
+<span class="sd">                      Number of concave depressions on the inclusion surface.</span>
 <span class="sd">    depth:            float, value between 0 to 1, default:0</span>
 <span class="sd">                      Parameter which determines depth of the concave depression from the inclusion surface.</span>
-<span class="sd">                      Not applicable for cylinder shape.</span>
 <span class="sd">    width:            float, default:0</span>
 <span class="sd">                      Parameter which determines width of the concave depression on the inclusion surface.</span>
-<span class="sd">                      Not applicable for cylinder shape.</span>
 <span class="sd">    coat:             bool, True/False, default:False</span>
 <span class="sd">                      Boolean for coat on inclusion. </span>
 <span class="sd">    t_coat:           float, default:0</span>
-<span class="sd">                      Thickness of the coating.</span>
+<span class="sd">                      Thickness of the coating in actual units (mm/cm).</span>
 <span class="sd">    space:            bool, True/False, default:False</span>
 <span class="sd">                      Boolean for space which determines gap between inclusions in micro/mesostructure.</span>
 <span class="sd">    t_space:          flaot, default:0</span>
-<span class="sd">                      Thickness of the spacing.</span>
+<span class="sd">                      Thickness of the spacing in actual units (mm/cm).</span>
 <span class="sd">                      Voxel value for the coat.</span>
 <span class="sd">    kwargs:           Other parameters, default:None</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">average_shape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">Id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inclusionList</span><span class="o">=</span><span class="p">[],</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">average_shape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">Id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inclusion_list</span><span class="o">=</span><span class="p">[],</span>
                  <span class="n">vf_max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_cuts</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">concave</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_concave</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">coat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">t_coat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">t_space</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">inclusionList</span> <span class="o">=</span> <span class="n">inclusionList</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inclusion_list</span> <span class="o">=</span> <span class="n">inclusion_list</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vf_max</span> <span class="o">=</span> <span class="n">vf_max</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="n">a</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
@@ -319,10 +297,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-
+        <span class="k">if</span> <span class="n">average_shape</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">average_shape</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">average_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">average_shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">average_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -341,7 +324,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">standard_inclusion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_inclusion</span><span class="p">()</span>
 
 <div class="viewcode-block" id="InclusionFamily.generate_inclusion"><a class="viewcode-back" href="../configuration.html#configuration.InclusionFamily.generate_inclusion">[docs]</a>    <span class="k">def</span> <span class="nf">generate_inclusion</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -349,16 +331,19 @@
 
 <span class="sd">        :return: Object of class :py:class:`smg_inclusion.Inclusion`.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">inclusion</span> <span class="o">=</span> <span class="n">Polyhedron</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="p">,</span> <span class="n">coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coat</span><span class="p">,</span>
-                                        <span class="n">t_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span>
-                                           <span class="n">t_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_space</span><span class="p">,</span> <span class="n">n_cuts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cuts</span><span class="p">,</span>
+        <span class="n">inclusion</span> <span class="o">=</span> <span class="n">Polyhedron</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">c</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">coat</span><span class="p">,</span>
+                                        <span class="n">t_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_coat</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">space</span><span class="p">,</span>
+                                           <span class="n">t_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_space</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n_cuts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_cuts</span><span class="p">,</span>
                                            <span class="n">concave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">concave</span><span class="p">,</span> <span class="n">n_concave</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_concave</span><span class="p">,</span>
-                                           <span class="n">depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">vox_inc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span><span class="p">,</span>
+                                           <span class="n">depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vox_inc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_inc</span><span class="p">,</span>
                                            <span class="n">vox_coat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_coat</span><span class="p">,</span> <span class="n">vox_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vox_space</span><span class="p">)</span>
             
         <span class="n">inclusion</span><span class="o">.</span><span class="n">generate_inclusion_matrix</span><span class="p">()</span>
         <span class="n">inclusion</span><span class="o">.</span><span class="n">compute_vox_volume</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">inclusion</span></div></div>
+        <span class="k">return</span> <span class="n">inclusion</span></div>
+    
+<div class="viewcode-block" id="InclusionFamily.set_resolution"><a class="viewcode-back" href="../configuration.html#configuration.InclusionFamily.set_resolution">[docs]</a>    <span class="k">def</span> <span class="nf">set_resolution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resolution</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span></div></div>
 
 </pre></div>
 

@@ -29,7 +29,7 @@ class Configuration:
            :file: ../examples/AB8_CMG_full.csv
            :header-rows: 1
            :class: longtable
-           :widths: 1,1,1,1,1,1,1,1,1,1,1,1,1
+           :widths: 1,1,1,1,1,1,1,1,1,1,1,1
 
         .. note::
           **The header of the parameters in the csv file should be as follows:**
