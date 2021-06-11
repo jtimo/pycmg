@@ -7,14 +7,14 @@ _____________________________________________________________________
 
 In order to generate a concrete mesostructure with a certain aggregate size distribution, we first need to specify the
 total aggregate volume fraction in the concrete material and then the aggregate size distribution.
-First create a text file containing the aggregate size distribution.
+First create a csv file containing the aggregate size distribution.
 
 .. figure:: ../../examples/AB8_200.png
    :scale: 45 %
    :alt: The multiscale model of mortar
    :align: center
 
-The text file should contain atleast two columns.
+The csv file should contain atleast two columns.
 The first column lists the aggregate sizes while the second column the corresponding volume-fraction.
 This volume fraction is relative to the total volume fraction of the aggregates in the material.
 Here is the text file with a distribution for AB8 standard concrete.
@@ -52,7 +52,7 @@ Now we can generate the required concrete mesostructure, visualize and export th
 ::
 
     #GENERATE
-    my_synthetic_microstructure =my_mesostructure.assemble_SRA()
+    my_synthetic_microstructure =my_mesostructure.assemble_sra()
     # VISUALIZE
     visualize_sections(my_synthetic_microstructure, 2)
     #EXPORT
@@ -98,9 +98,9 @@ below ::
 Following input details must be/can be specified for the inclusion family to load to
 the Configuration object.
 
-1.	a: radius of the inclusion along axis-1, default 10
-2.	b: radius of the inclusion along axis-2, default b=a
-3.	c: radius of the inclusion along axis-3/half of length of the inclusion for ‘Cylinder’, default c=a
+1.	a: diameter of the inclusion along axis-1, default 10
+2.	b: diameter of the inclusion along axis-2, default b=a*average_shape[1]
+3.	c: diameter of the inclusion along axis-3, default c=a*average_shape[2]
 4.	vf_max: Maximum volume fraction for the current inclusion family.
 5.	coat: True/False for coating provision on the inclusion, default False
 6.	t_coat: thickness of coating on the inclusion, default 0
@@ -123,14 +123,18 @@ Column header name should be same as the input names given above, but position o
 can be changed and non-mandatory input columns can be removed.
 
 Followed with this, Mesostructure object is created with mesostructure size and configuration
-as input. Default mesostructure size is 100,100,100. So, it is not mandatory to load this value.
+as input. Default mesostructure size is 100,100,100. Default resolution is 1,1,1. The resolution relates the
+voxel dimensions and the phyiscal dimensions. For e.g. if the resolution is 0.5, 0.5, 0.5, and the mesostructure is 50, 50, 50 mm
+then each mm3 is equal to 2x2x2 voxels. So, it is not mandatory to load this value.
 Also configuration can be separately added by using ‘add_configuration’ method ::
 
-    my_mesostructure = Mesostructure(mesostructure_size=[200,200,200], my_configuration)
+    my_mesostructure = Mesostructure(mesostructure_size=[200,200,200]),
+    my_configuration, resolution = [0.5, 0.5, 0.5]
 
 or ::
 
     my_mesostructure = Mesostructure(mesostructure_size=[200,200,200])
+    resolution = [0.5, 0.5, 0.5]
     my_mesostructure.add_configuration(my_configuration)
 
 Finally, assembly of the inclusions as per the details given in the configuration is done using
@@ -138,7 +142,7 @@ CMG Semi-Random Assembly (SRA) algorithm.
 This algorithm assembles the inclusions at random locations, but with CMG optimization.
 SRA algorithm is called as follows::
 
-    asmbly.assemble_SRA()
+    asmbly.assemble_sra()
 
 The algorithm tries to assemble the inclusions till maximum volume fraction is achieved.
 Since the assembly is at random points, it becomes difficult to fit the inclusions into
@@ -180,9 +184,11 @@ Here is the complete code to generate a concrete mesostructure for AB8 standard:
     from visualization import export_data, visualize_sections
 
     my_configuration = Configuration(vf_max_assembly=0.3)
-    my_configuration.load_inclusions(conf_csv='AB8_CMG_full.csv')
+    my_configuration.load_inclusions(conf_csv='AB8_CMG.csv')
+    my_configuration.sort_inclusions()
     my_mesostructure = Mesostructure(mesostructure_size=[200, 200, 200])
+    resolution = [0.5, 0.5, 0.5]
     my_mesostructure.add_configuration(my_configuration)
-    my_synthetic_microstructure =my_mesostructure.assemble_SRA()
+    my_synthetic_microstructure =my_mesostructure.assemble_sra()
     visualize_sections(my_synthetic_microstructure, 2)
     export_data(my_synthetic_microstructure, 'vtk', 'mesostructure.vti')
