@@ -11,7 +11,7 @@ Installation
 - Choose our pre-built concrete specification in the examples folder to generate your first mesostructure.
 - Advanced users can use PyCMG to generate custom mesostructures (see tutorial).
 
-If you have questions, drop us an email at timothy.jithenderjaswant[at]rub.de.
+If you have questions, drop us an email at jithender.timothy[at]tum.de.
 
 --------------
 License

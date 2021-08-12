@@ -15,6 +15,7 @@ PyCMG is an open source software package for generating synthetic concrete mesos
    tutorial.rst
    modules.rst
    developers.rst
+   publications.rst
 
 
 Indices and tables

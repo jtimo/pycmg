@@ -1,13 +1,14 @@
 Developers
 ************
 
+- Jithender J. Timothy (lead developer and maintains the code)
+
 The following have contributed to the development of this package:
 
 - Vijaya Holla (programmed the original MATLAB code, optimized the Python version),
 - Giao Vu (specification for concrete),
 - Fabian Diewald (data for validation),
 - Ketaki Godbole (converting MATLAB code to Python) and
-- Jithender J. Timothy and Günther Meschke (conception and team management)
 
 --------------
 Funding
