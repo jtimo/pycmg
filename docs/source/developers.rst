@@ -8,7 +8,7 @@ The following have contributed to the development of this package:
 - Vijaya Holla (programmed the original MATLAB code, optimized the Python version),
 - Giao Vu (specification for concrete),
 - Fabian Diewald (data for validation),
-- Ketaki Godbole (converting MATLAB code to Python) 
+- Ketaki Godbole (converting MATLAB code to Python)
 
 --------------
 Funding
