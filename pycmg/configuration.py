@@ -144,7 +144,7 @@ class InclusionFamily:
         self.__dict__.update(kwargs)
         if average_shape == False:
             average_shape=np.array([1,1,1])
-        self.resolution = np.array([1,1,1])
+        self.resolution = np.array([1, 1, 1])
         self.average_shape = np.array(average_shape).astype(float)
         
         self.a = float(self.a)

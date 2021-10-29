@@ -140,4 +140,7 @@ cython_debug/
 #ignore VTK files
 *.vti
 *.npz
+*.npy
 .DS_Store
+
+*.pyc
