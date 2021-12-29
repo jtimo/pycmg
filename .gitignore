@@ -144,3 +144,4 @@ cython_debug/
 .DS_Store
 
 *.pyc
+*.cpython-38.pyc
