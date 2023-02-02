@@ -4,13 +4,14 @@ import numpy as np
 from inclusion_simp import Polyhedron
 import pandas as pd
 
+
 class Configuration:
 
     '''
     Provides methods for configuring the geometrical and topological parameters of the mesostructure.
     '''
 
-    def __init__(self,vf_max_assembly=0.3, average_shape=False, simplify = True, size_control = 1):
+    def __init__(self,vf_max_assembly=0.3, average_shape=False):
         self.inclusion_fam_list = []
         self.inclusion_fam_id_list = []
         self.inclusion_vol_list = []
@@ -18,9 +19,7 @@ class Configuration:
         self.inclusion_fam_id_count = 0
         self.vf_max_assembly = vf_max_assembly
         self.average_shape = average_shape
-        self.simplify = simplify
-        self.size_control = size_control
-        
+
     def load_inclusions(self, conf_csv=None):
 
         '''
@@ -30,7 +29,7 @@ class Configuration:
            :file: ../examples/AB8_CMG_full.csv
            :header-rows: 1
            :class: longtable
-           :widths: 1,1,1,1,1,1,1,1,1,1,1,1
+           :widths: 1,1,1,1,1
 
         .. note::
           **The header of the parameters in the csv file should be as follows:**
@@ -38,8 +37,9 @@ class Configuration:
           - a:              diameter of the inclusion along direction-1 in actual units (mm/cm etc.).
           - b:              diameter of the inclusion along direction-2 in actual units (mm/cm etc.).
           - c:              diameter of the inclusion along direction-3 in actual units (mm/cm etc.).
-          - n_cuts:         Number of faces/cuts for the polyhedron shaped aggregates.
           - vf_max:         Maximum volume fraction of each sized aggregates (value between 0 to 1).
+          - n_cuts:         Number of faces/cuts for the polyhedron shaped aggregates.
+
 
         :param conf_header: If not csv, then a header with parameter names as given above and corresponding array of values have to be loaded.
         :param conf_values: In not csv, then values corresponding to the header have to be loaded.
@@ -55,28 +55,16 @@ class Configuration:
         if data.isnull().values.any() is True:
             raise Exception('csv file has empty cells')
         conf_values=np.array(conf_values)
-             
-        if self.simplify is True:
-            for i in range(np.shape(conf_values)[0]):
-                aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
-                if max(aggr.a, aggr.b, aggr.c) < self.size_control:
-                    continue
-                else:
-                    self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
-                    self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
-                    self.inclusion_fam_list.append(aggr)
-                    self.inclusion_fam_id_count += 1
-        else:
-            for i in range(np.shape(conf_values)[0]):
-                aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
-                self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
-                self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
-                self.inclusion_fam_list.append(aggr)
-                self.inclusion_fam_id_count += 1
-        
+        for i in range(np.shape(conf_values)[0]):
+            aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
+            self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
+            self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
+            self.inclusion_fam_list.append(aggr)
+            self.inclusion_fam_id_count += 1
+
         self.inclusion_sorted = np.array(self.inclusion_fam_id_list)
-        
-    
+
+
 class InclusionFamily:
     '''
     This class is for family of inclusions
@@ -106,12 +94,11 @@ class InclusionFamily:
                  vf_max=1, a=10, b=0, c=0, n_cuts=10, kwargs=None):
         self.inclusion_list = inclusion_list
         self.vf_max = vf_max
-        self.a = float(a)
-        self.b = float(b)
-        self.c = float(c)
+        self.a = a
+        self.b = b
+        self.c = c
         self.n_cuts = n_cuts
-        self.n_cuts = int(self.n_cuts)
-        self.vf_max = float(vf_max)
+        self.vf_max = vf_max
         self.standard_inclusion = None
         self.Id = None
         self.vf = 0
@@ -122,10 +109,17 @@ class InclusionFamily:
         self.resolution = np.array([1, 1, 1])
         self.average_shape = np.array(average_shape).astype(float)
         
+        self.a = float(self.a)
+        self.b = float(self.b)
+        self.c = float(self.c)
+        
         if self.b == 0:
             self.b = average_shape[1]*self.a
         if self.c == 0:
             self.c = average_shape[2]*self.a
+        self.vf_max = float(self.vf_max)
+        self.n_cuts = int(self.n_cuts)
+        self.vf_max = float(self.vf_max)
         self.vox_inc = int(1)
 
     def generate_inclusion(self):
@@ -135,7 +129,7 @@ class InclusionFamily:
         :return: Object of class :py:class:`smg_inclusion.Inclusion`.
         '''
         inclusion = Polyhedron(a=self.a/self.resolution[0], b=self.b/self.resolution[1], 
-                               c=self.c/self.resolution[2], n_cuts=self.n_cuts)
+                               c=self.c/self.resolution[2], n_cuts=self.n_cuts)           
         inclusion.generate_inclusion_matrix()
         inclusion.compute_vox_volume()
         return inclusion
@@ -143,10 +137,3 @@ class InclusionFamily:
     def set_resolution(self, resolution):
         self.resolution = resolution
 
-
-        
-    
-    
-    
-    
-    

@@ -44,23 +44,6 @@ class Polyhedron():
         generate polyhedron for the given size. The polyhedron will have
         major axis -size and minor axes as size*aspRat_1 and size*aspRat_2.
 
-        Parameters
-        ----------
-        rx:         float
-                    Major/minor axis 1.
-        ry:         float
-                    Major/minor axis 2.
-        rz:         float
-                    Major/minor axis 3
-        n_cuts:     int
-                    Number of faces for the polyhedron.
-        theta_faces:array of size (3,n_cuts), type float between 0 to 2*pi
-                    Polyhedron faces angles
-        theta_inc: array of size 3, type float between 0 to 2*pi
-                    3D angle of the ellipsoid.
-        vox:        int
-                    Voxel value to represent ellipsoid shape.
-
         Return
         ------
         mat_inc:    3D array (int/bool)
@@ -71,7 +54,7 @@ class Polyhedron():
         c = np.copy(self.c)
         rx = a/2.0; ry = b/2.0; rz = c/2.0
         n_cuts = self.n_cuts
-        theta_faces = np.random.random((3, self.n_cuts.astype(int))) * 2 * pi
+        theta_faces = np.random.random((3, self.n_cuts)) * 2 * pi
         theta_inc = np.random.random((3)) * 2 * pi
         vox = self.vox_inc
         
