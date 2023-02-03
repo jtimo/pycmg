@@ -7,78 +7,21 @@ class Mesostructure:
 
     Parameters
     ----------
-    mesostructure_size:   array of size (3), type int, default:[100,100,100]
-                          Size of the mesostructure 3D matrix.
     configuration:        Configuration object
-                          Configuration object which provides details about the aggregate type and size distribution for assembly.
-    resolution            array of size (3), type float, default: [1,1,1]
-                          resolution of the mesostructure (resolution for the voxel format)
-                          
+                          Configuration object which provides details about the aggregate type and size distribution for assembly.                      
     '''
-    def __init__(self,configuration, mesostructure_size=[100,100,100], resolution=False):
-        if resolution==False:
-            resolution = np.array([1,1,1])
-        
-        self.meso_size = mesostructure_size
-        self.resolution=np.array(resolution).astype(float)
-        self.size = np.array(np.array(mesostructure_size).astype(float)/self.resolution).astype(int)
+    
+    def __init__(self,configuration): 
         self.configuration = configuration
-        self.vf_max = []; self.vf = []; self.attempt = []
-        
+        self.meso_size = self.configuration.meso_size
+        self.resolution = self.configuration.resolution
+        self.size = self.configuration.size       
             
         if self.configuration is None:
             raise Exception('No configuration is loaded')
-            
-        if len(self.configuration.inclusion_fam_list) == 0:
-            raise Exception('No inputs are given for the configuration. You can provide default inputs by using load_inclusion() method in Configuration class!')
-
-        if np.sum(self.vf_max) > 1:
-            raise Exception('Maximum volume fraction of the aggregates in the micro/mesostructure cannot be more than 1')
-        
-        if np.sum(self.size != 0) != 3:
-            raise Exception('Assembly size is invalid')
         
         self.vf_max = self.configuration.vf_max_assembly  
-        self.inclusion_list = []
-        self.n_inc_total = []
         self.mat_meso = np.zeros((self.size)).astype(int)
-
-           
-    def __generate_inclusion_list(self):
-        
-        assembly_vf_vox = np.size(self.mat_meso)
-        inclusion_count = []
-        vf_inc_max = 0
-        
-        for i in range(np.size(self.configuration.inclusion_fam_list)):
-            self.configuration.inclusion_fam_list[i].set_resolution(self.resolution)
-            vol_vox = 0
-            shuffle_number = 10
-            for j in range(shuffle_number):
-                standard_inclusion = self.configuration.inclusion_fam_list[i].generate_inclusion()
-                vol_vox += standard_inclusion.vol_vox       
-                
-            average_vol_vox = float(vol_vox)/float(shuffle_number)
-            self.configuration.inclusion_fam_list[i].vol_vox = average_vol_vox
-            vf_inc_max += self.configuration.inclusion_fam_list[i].vf_max
-            self.configuration.inclusion_fam_list[i].vf_each = float(self.configuration.inclusion_fam_list[i].vol_vox)/float(assembly_vf_vox)
-            self.configuration.inclusion_fam_list[i].n_inclusion = int(np.ceil(float(self.configuration.inclusion_fam_list[i].vf_max)*self.vf_max/self.configuration.inclusion_fam_list[i].vf_each))
-            inclusion_count.append(self.configuration.inclusion_fam_list[i].n_inclusion)
-            self.configuration.inclusion_fam_list[i].count = 0   
-        
-        if max(self.configuration.inclusion_size_list) > np.min(self.meso_size):
-            raise Exception('Inclusion size is larger than the mesostructure size')
-
-        sort = np.array(self.configuration.inclusion_size_list).argsort()
-        sorted_id = np.array(self.configuration.inclusion_fam_id_list)[sort[::-1]]
-
-        if vf_inc_max <= 1-10E-3 or vf_inc_max >= 1+10E-3:
-            raise Exception('Total maximum volume fraction of all inclusion families must be close to 1')
-            
-        self.n_inc_total.append(np.sum(inclusion_count))
-        inclusion_fam_list = self.configuration.inclusion_fam_list
-        
-        return inclusion_fam_list, sorted_id
     
     
     def assemble_sra(self, attempt_max=500000, iter_limit=10):
@@ -98,7 +41,8 @@ class Mesostructure:
                         Mesostructure 3D array with aggregates/pores/particles assembled inside.
         '''
         
-        inclusion_fam_list,sorted_id = self.__generate_inclusion_list()
+        inclusion_fam_list = self.configuration.inclusion_fam_list
+        sorted_id = self.configuration.sorted_id
         
         vf = 0; i = 0; attempt = 0
         vf_max = self.vf_max
@@ -140,10 +84,7 @@ class Mesostructure:
                 if inclusion_fam_list[sorted_id[i]].count >= inclusion_fam_list[sorted_id[i]].n_inclusion:
                     i += 1 
                 
-        self.vf.append(vf); self.attempt.append(attempt)
-        self.inclusion_list.append(inclusion_list)
-        print('size of inclusion list:', len(inclusion_list))
-        print('Configuration {0} is assembled with volume fraction:', vf)
+        print('Configuration is assembled with volume fraction:', vf)
         return self.mat_meso
 
 

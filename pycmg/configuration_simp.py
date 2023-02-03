@@ -6,21 +6,56 @@ import pandas as pd
 
 
 class Configuration:
-
     '''
     Provides methods for configuring the geometrical and topological parameters of the mesostructure.
+    
+    Parameters
+    ----------
+    mesostructure_size:   array of size (3), type int, default:[100,100,100]
+                          Size of the mesostructure 3D matrix.
+    resolution            array of size (3), type float, default: [1,1,1]
+                          resolution of the mesostructure (resolution for the voxel format)
     '''
 
-    def __init__(self,vf_max_assembly=0.3, average_shape=False):
+    def __init__(self,vf_max_assembly=0.3, average_shape=[1, 0.5, 0.5], 
+                 mesostructure_size=[100,100,100], resolution=False,
+                 size_control=False, control_size=1, ratio_control=False, control_ratio=0.1):
         self.inclusion_fam_list = []
         self.inclusion_fam_id_list = []
-        self.inclusion_vol_list = []
         self.inclusion_size_list = []
         self.inclusion_fam_id_count = 0
         self.vf_max_assembly = vf_max_assembly
         self.average_shape = average_shape
+        
+        if resolution==False:
+            resolution = np.array([1,1,1])
+        self.meso_size = mesostructure_size
+        self.resolution=np.array(resolution).astype(float)
+        self.size = np.array(np.array(self.meso_size).astype(float)/self.resolution).astype(int)
+        self.assembly_vf_vox = self.size[0]*self.size[1]*self.size[2]
+        
+        self.size_control = size_control
+        self.control_size = control_size
+        self.ratio_control = ratio_control
+        self.control_ratio = control_ratio
+        
+    def configure_inclusions(self, conf_csv=None):
+        
+        self.__load_inclusions(conf_csv)
+        
+        if len(self.inclusion_fam_list) == 0:
+            raise Exception('No inputs are given for the configuration. You can provide default inputs by using load_inclusion() method in Configuration class!')
 
-    def load_inclusions(self, conf_csv=None):
+        if np.sum(self.vf_max_assembly) > 1:
+            raise Exception('Maximum volume fraction of the aggregates in the micro/mesostructure cannot be more than 1')
+        
+        if np.sum(self.size != 0) != 3:
+            raise Exception('Assembly size is invalid')
+            
+        self.__generate_inclusion_list()
+        
+
+    def __load_inclusions(self, conf_csv):
 
         '''
         :param conf_csv: string (with .csv extension), Location of the csv file which has aggregate parameters.
@@ -53,17 +88,70 @@ class Configuration:
         conf_header = data.columns
         data.replace(r'^\s*$', np.nan, regex=True)
         if data.isnull().values.any() is True:
-            raise Exception('csv file has empty cells')
+            raise Exception('csv file has empty cells')  
         conf_values=np.array(conf_values)
-        for i in range(np.shape(conf_values)[0]):
-            aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
-            self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
-            self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
-            self.inclusion_fam_list.append(aggr)
-            self.inclusion_fam_id_count += 1
+        
+        if self.size_control is True:
+            for i in range(np.shape(conf_values)[0]):
+                aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
+                if max(aggr.a, aggr.b, aggr.c) < self.control_size:
+                    continue
+                else:                    
+                    self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
+                    self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
+                    self.inclusion_fam_list.append(aggr)
+                    self.inclusion_fam_id_count += 1 
+                    
+        elif self.ratio_control is True:
+            for i in range(np.shape(conf_values)[0]):
+                aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
+                if max(aggr.a/self.meso_size[0], aggr.b/self.meso_size[1], aggr.c/self.meso_size[2]) < self.control_ratio:
+                    continue
+                else:
+                    self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
+                    self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
+                    self.inclusion_fam_list.append(aggr)
+                    self.inclusion_fam_id_count += 1 
+                    
+        else:
+            for i in range(np.shape(conf_values)[0]):
+                aggr = InclusionFamily(average_shape=self.average_shape, kwargs=dict(zip(conf_header, conf_values[i, :])))
+                self.inclusion_fam_id_list.append(self.inclusion_fam_id_count)
+                self.inclusion_size_list.append(max(aggr.a, aggr.b, aggr.c))
+                self.inclusion_fam_list.append(aggr)
+                self.inclusion_fam_id_count += 1                
+        
+        
+    def __generate_inclusion_list(self):
+        
+        inclusion_count = []
+        vf_inc_max = 0
+        
+        for i in range(np.size(self.inclusion_fam_list)):
+                vf_inc_max += self.inclusion_fam_list[i].vf_max
+        
+        for i in range(np.size(self.inclusion_fam_list)):
+            self.inclusion_fam_list[i].set_resolution(self.resolution)
+            vol_vox = 0
+            shuffle_number = 10
+            for j in range(shuffle_number):
+                standard_inclusion = self.inclusion_fam_list[i].generate_inclusion()
+                vol_vox += standard_inclusion.vol_vox       
+                
+            average_vol_vox = float(vol_vox)/float(shuffle_number)
+            self.inclusion_fam_list[i].vol_vox = average_vol_vox
+            self.inclusion_fam_list[i].vf_max = self.inclusion_fam_list[i].vf_max / vf_inc_max
+            self.inclusion_fam_list[i].vf_each = float(self.inclusion_fam_list[i].vol_vox)/float(self.assembly_vf_vox)
+            self.inclusion_fam_list[i].n_inclusion = int(np.ceil(float(self.inclusion_fam_list[i].vf_max)*self.vf_max_assembly/self.inclusion_fam_list[i].vf_each))
+            inclusion_count.append(self.inclusion_fam_list[i].n_inclusion)
+            self.inclusion_fam_list[i].count = 0   
+        
+        if max(self.inclusion_size_list) > np.min(self.meso_size):
+            raise Exception('Inclusion size is larger than the mesostructure size')
 
-        self.inclusion_sorted = np.array(self.inclusion_fam_id_list)
-
+        sort = np.array(self.inclusion_size_list).argsort()
+        self.sorted_id = np.array(self.inclusion_fam_id_list)[sort[::-1]]
+    
 
 class InclusionFamily:
     '''
@@ -94,32 +182,24 @@ class InclusionFamily:
                  vf_max=1, a=10, b=0, c=0, n_cuts=10, kwargs=None):
         self.inclusion_list = inclusion_list
         self.vf_max = vf_max
-        self.a = a
-        self.b = b
-        self.c = c
+        self.a = float(a)
+        self.b = float(b)
+        self.c = float(c)
         self.n_cuts = n_cuts
-        self.vf_max = vf_max
-        self.standard_inclusion = None
-        self.Id = None
-        self.vf = 0
+        self.vf_max = float(vf_max)
 
         self.__dict__.update(kwargs)
         if average_shape == False:
             average_shape=np.array([1,1,1])
         self.resolution = np.array([1, 1, 1])
         self.average_shape = np.array(average_shape).astype(float)
-        
-        self.a = float(self.a)
-        self.b = float(self.b)
-        self.c = float(self.c)
+
         
         if self.b == 0:
             self.b = average_shape[1]*self.a
         if self.c == 0:
             self.c = average_shape[2]*self.a
-        self.vf_max = float(self.vf_max)
         self.n_cuts = int(self.n_cuts)
-        self.vf_max = float(self.vf_max)
         self.vox_inc = int(1)
 
     def generate_inclusion(self):
